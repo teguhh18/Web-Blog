@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LoginController;
@@ -43,7 +44,7 @@ Route::resource('/admin/berita', BeritaController::class)->middleware('auth')->n
 
 
 // USER
-Route::get('/home',[HomeController::class, 'index'])->name('user.home');
+Route::get('/',[HomeController::class, 'index'])->name('user.home');
 Route::get('/about',[HomeController::class, 'about'])->name('user.about');
 Route::get('/contact',[HomeController::class, 'contact'])->name('user.contact');
 
@@ -52,3 +53,5 @@ Route::get('/bacaBerita/{slug}',[HomeController::class, 'beritaBaca'])->name('us
 
 Route::get('/kategori',[HomeController::class, 'listKategori'])->name('user.kategori');
 Route::get('/berita/kategori/{slug}',[HomeController::class, 'beritaByKategori'])->name('user.berita.kategori');
+
+Route::post('/comment/{slug}', [CommentController::class, 'store'])->name('user.comment.store')->middleware('auth');

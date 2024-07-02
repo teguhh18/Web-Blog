@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
+use App\Models\Comment;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 
@@ -25,8 +26,11 @@ class HomeController extends Controller
         $berita = Berita::where('slug', $slug)->firstOrFail();
         $title = $berita->title;
         $dataKategori = Kategori::all();
+        $countComment = Comment::where('berita_id', $berita->id)->count();
+        $dataComment = Comment::where('berita_id', $berita->id)->get();
+        // dd($dataComment); 
         return view('user.bacaBerita', compact(
-            'title', 'berita', 'dataBerita','dataKategori'
+            'title', 'berita', 'dataBerita','dataKategori', 'countComment', 'dataComment'
         ));
     }
 
