@@ -1,12 +1,13 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
-use App\Http\Controllers\LoginController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,17 +29,18 @@ Route::get('/login',[LoginController::class, 'login'])->name('login')->middlewar
 Route::post('/login',[LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('logout',[LoginController::class, 'logout'])->name('logout');
 
-Route::get('/profile/{id}',[AdminController::class, 'adminProfile'])->name('admin.profile')->middleware('auth');
+Route::get('/profile/{id}',[AdminController::class, 'adminProfile'])->name('admin.profile')->middleware('auth_admin');
 
-Route::put('/profile/update/{id}',[AdminController::class, 'updateProfile'])->name('admin.profile.update')->middleware('auth');
-Route::put('/password/update/{id}',[AdminController::class, 'updatePassword'])->name('admin.password.update')->middleware('auth');
+Route::put('/profile/update/{id}',[AdminController::class, 'updateProfile'])->name('admin.profile.update')->middleware('auth_admin');
+Route::put('/password/update/{id}',[AdminController::class, 'updatePassword'])->name('admin.password.update')->middleware('auth_admin');
 
 
-Route::get('/admin/home',[AdminController::class, 'index'])->name('admin.home');
+Route::get('/admin/home',[AdminController::class, 'index'])->middleware('auth_admin')->name('admin.home');
 
-Route::resource('/admin/kategori', KategoriController::class)->middleware('auth')->names('admin.kategori');
+Route::resource('/admin/kategori', KategoriController::class)->middleware('auth_admin')->names('admin.kategori');
 
-Route::resource('/admin/berita', BeritaController::class)->middleware('auth')->names('admin.berita');
+Route::resource('/admin/berita', BeritaController::class)->middleware('auth_admin')->names('admin.berita');
+Route::resource('/admin/user', UserController::class)->middleware('auth_admin')->names('admin.user');
 
 
 

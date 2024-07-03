@@ -43,6 +43,12 @@
                 <span>Berita</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('admin.user.index') }}">
+                <i class="bi bi-person"></i>
+                <span>Data User</span>
+            </a>
+        </li>
         <!-- End Login Page Nav -->
 
         
