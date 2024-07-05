@@ -36,7 +36,7 @@
                             <div class="comment d-flex mb-4">
                                 <div class="flex-shrink-0">
                                     <div class="avatar avatar-sm rounded-circle">
-                                        <img class="avatar-img" src="assets/img/person-5.jpg" alt=""
+                                        <img class="avatar-img" src="{{ asset('storage/' . $comments->user->foto) }}" alt=""
                                             class="img-fluid" />
                                     </div>
                                 </div>

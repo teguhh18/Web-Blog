@@ -6,6 +6,7 @@ use App\Models\Berita;
 use App\Models\Kategori;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -37,18 +38,31 @@ class AdminController extends Controller
     }
 
     public function updateProfile(Request $request, $id)
-    {
-        $user = User::Where('id', decrypt($id))->firstOrFail();
+    {$user = User::Where('id', decrypt($id))->firstOrFail();
         // dd($user);
-        $validatedData  = $request->validate([
-            'name'     => 'required|max:255',
-            "email" => 'required',
-        ]);
+        $rules = [
+            'name' => 'required|max:255',
+            // 'email' => 'required|unique:users',
+            // 'foto' => 'image'
+        ];
 
-        $user->name = $validatedData['name'];
-        $user->email = $validatedData['email'];
+       
+        if($request->email != $user->email) {
+            $rules['email'] = 'required|unique:users';
+        }
 
-        $user->save();
+        $validatedData = $request->validate($rules);
+
+        if ($request->file('foto')) {
+            if ($user->foto) {
+                Storage::delete('public/' . $user->foto);
+            }
+            $validatedData['foto'] = $request->file('foto')->store('foto-users', 'public');
+            
+        }
+
+        User::where('id', $user->id)
+                ->update($validatedData);
         return redirect()->route('admin.profile', $id)->with('success', 'Data Berhasil Diubah!!');
     }
 

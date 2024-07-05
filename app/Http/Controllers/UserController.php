@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -76,7 +77,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $title = "Edit Data User";
+        return  view('admin.user.edit', compact(
+            'title',
+            'user'
+        ));
     }
 
     /**
@@ -84,7 +89,33 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $rules = [
+            'name' => 'required|max:255',
+            // 'email' => 'required|unique:users',
+            'level' => 'required',
+            'foto' => 'image'
+        ];
+
+        
+
+        if($request->email != $user->email) {
+            $rules['email'] = 'required|unique:users';
+        }
+
+        $validatedData = $request->validate($rules);
+
+        if ($request->file('foto')) {
+            if ($user->foto) {
+                Storage::delete('public/' . $user->foto);
+            }
+            $validatedData['foto'] = $request->file('foto')->store('foto-users', 'public');
+            
+        }
+
+        User::where('id', $user->id)
+                ->update($validatedData);
+
+        return redirect()->route('admin.user.index')->with('success', 'Data User Berhasil Diubah!!');
     }
 
     /**
@@ -92,6 +123,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+         // Hapus foto lama 
+         if($user->foto) {
+            Storage::delete('public/' . $user->foto);
+        }
+        User::destroy($user->id);
+
+        return redirect()->route('admin.user.index')->with('success', 'User Berhasil Dihapus!!');
     }
 }

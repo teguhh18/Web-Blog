@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class LoginController extends Controller
 {
@@ -37,7 +38,7 @@ class LoginController extends Controller
         }
 
         // Gagal, kembali ke halaman login dan memberi pesan Login Failed.
-        return back()->with('loginError', 'Login Failed');
+        return back()->with('loginError', 'Login Gagal');
     }
 
 
@@ -67,6 +68,68 @@ class LoginController extends Controller
 
         // Kembalikan ke halaman login dan beri pesan, Pesan disimpan di session
         return redirect('/login')->with('success', 'Berhasil Buat Akun, Silahkan Login');
+    }
+
+    public function userProfile($id)
+    {
+        $title = "Profile User";
+        $user = User::where('id', decrypt($id))->firstOrFail();
+        return  view('user.myProfile', compact(
+            'title',
+            'user'
+        ));
+    }
+
+    public function updateProfile(Request $request, $id)
+    {
+        
+        $user = User::Where('id', decrypt($id))->firstOrFail();
+        // dd($user);
+        $rules = [
+            'name' => 'required|max:255',
+            // 'email' => 'required|unique:users',
+            // 'foto' => 'image'
+        ];
+
+       
+        if($request->email != $user->email) {
+            $rules['email'] = 'required|unique:users';
+        }
+
+        $validatedData = $request->validate($rules);
+
+        if ($request->file('foto')) {
+            if ($user->foto) {
+                Storage::delete('public/' . $user->foto);
+            }
+            $validatedData['foto'] = $request->file('foto')->store('foto-users', 'public');
+            
+        }
+
+        User::where('id', $user->id)
+                ->update($validatedData);
+
+        return redirect()->route('user.profile', $id)->with('success', 'Profile Berhasil Diubah!!');
+    }
+
+    public function updatePassword(Request $request, $id)
+    {
+        $user = User::findOrFail(decrypt($id));
+
+        $validatedData = $request->validate([
+            // 'password' => 'required',
+            'newpassword' => 'required',
+            'renewpassword' => 'required',
+        ]);
+
+        if ($request->newpassword !== $request->renewpassword) {
+            return back()->with('error', 'New password dan Renewpassword harus Sama');
+        }
+
+        $user->password = bcrypt($validatedData['newpassword']);
+        $user->save();
+
+        return redirect()->route('user.profile', $id)->with('success', 'Password Berhasil Diubah');
     }
 
     public function logout(Request $request)

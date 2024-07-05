@@ -35,6 +35,7 @@ Route::post('logout',[LoginController::class, 'logout'])->name('logout');
 Route::get('/profile/{id}',[AdminController::class, 'adminProfile'])->name('admin.profile')->middleware('auth_admin');
 
 Route::put('/profile/update/{id}',[AdminController::class, 'updateProfile'])->name('admin.profile.update')->middleware('auth_admin');
+
 Route::put('/password/update/{id}',[AdminController::class, 'updatePassword'])->name('admin.password.update')->middleware('auth_admin');
 
 
@@ -60,3 +61,8 @@ Route::get('/kategori',[HomeController::class, 'listKategori'])->name('user.kate
 Route::get('/berita/kategori/{slug}',[HomeController::class, 'beritaByKategori'])->name('user.berita.kategori');
 
 Route::post('/comment/{slug}', [CommentController::class, 'store'])->name('user.comment.store')->middleware('auth');
+
+Route::get('/userProfile/{id}', [LoginController::class, 'userProfile'])->name('user.profile')->middleware('auth');
+
+Route::put('/userProfile/update/{id}',[LoginController::class, 'updateProfile'])->name('user.profile.update')->middleware('auth');
+Route::put('/userPassword/update/{id}',[LoginController::class, 'updatePassword'])->name('user.password.update')->middleware('auth');
