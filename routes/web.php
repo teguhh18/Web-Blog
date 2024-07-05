@@ -25,6 +25,9 @@ use App\Http\Controllers\KategoriController;
 // });
 
 // ADMIN
+Route::get('/register',[LoginController::class, 'register'])->name('register')->middleware('guest');
+Route::post('/register/store',[LoginController::class, 'registerStore'])->name('register.store')->middleware('guest');
+
 Route::get('/login',[LoginController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login',[LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('logout',[LoginController::class, 'logout'])->name('logout');
