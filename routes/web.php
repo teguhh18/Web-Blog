@@ -8,6 +8,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\PasswordResetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,3 +67,14 @@ Route::get('/userProfile/{id}', [LoginController::class, 'userProfile'])->name('
 
 Route::put('/userProfile/update/{id}',[LoginController::class, 'updateProfile'])->name('user.profile.update')->middleware('auth');
 Route::put('/userPassword/update/{id}',[LoginController::class, 'updatePassword'])->name('user.password.update')->middleware('auth');
+
+
+
+// RESET PASSWORD
+Route::get('forgot-password', [PasswordResetController::class, 'showForgotForm'])->name('password.forgot');
+Route::post('forgot-password', [PasswordResetController::class, 'sendOTP'])->name('password.email');
+
+Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
+
+
