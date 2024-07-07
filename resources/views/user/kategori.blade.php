@@ -14,7 +14,13 @@
                 <img src="{{ asset('storage/' . $berita->foto) }}" alt="" class="img-fluid img-thumbnail" style="height: 300px; width:500px">
               </a>
               <div>
-                <div class="post-meta"><span class="date">{{ $berita->kategori->nama }}</span> <span class="mx-1">&bullet;</span> <span>{{ \Carbon\Carbon::parse($berita->created_at)->translatedFormat('d F Y') }}</span></div>
+                <div class="post-meta">
+                  <span class="date">{{ $berita->kategori->nama }}</span> 
+                  <span class="mx-1">&bullet;</span> 
+                  <span>{{ \Carbon\Carbon::parse($berita->created_at)->translatedFormat('d F Y') }}</span>
+                  <span class="mx-1">&bullet;</span>
+                  <span><i class="bi bi-eye"></i> {{ $berita->views }}</span>
+              </div>
                 <h3><a href="{{ route('user.berita.baca', $berita->slug) }}">{{ $berita->title }}</a></h3>
                 <p></p>
                 <div class="d-flex align-items-center author">

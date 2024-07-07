@@ -63,7 +63,7 @@
                     <div><a href="{{ route('user.berita') }}" class="more">Lihat Semua Berita</a></div>
                 </div>
                 <div class="row g-5">
-                    <div class="col-lg-10">
+                    <div class="col-lg-9">
                         <div class="row d-flex flex-wrap">
                             @foreach($dataBerita->skip(3) as $berita)
                             
@@ -71,8 +71,13 @@
                                 <div class="post-entry-1">
                                     <a href="{{ route('user.berita.baca', $berita->slug) }}"><img src="{{ asset('storage/' . $berita->foto) }}"
                                             alt="" class="img-fluid img-thumbnail" style="height: 250px; width:350px"></a>
-                                    <div class="post-meta"><span class="date">{{ $berita->kategori->nama }}</span> <span
-                                            class="mx-1">&bullet;</span> <span>{{ \Carbon\Carbon::parse($berita->created_at)->translatedFormat('d F Y') }}</span></div>
+                                            <div class="post-meta">
+                                                <span class="date">{{ $berita->kategori->nama }}</span> 
+                                                <span class="mx-1">&bullet;</span> 
+                                                <span>{{ \Carbon\Carbon::parse($berita->created_at)->translatedFormat('d F Y') }}</span>
+                                                <span class="mx-1">&bullet;</span>
+                                                <span><i class="bi bi-eye"></i> {{ $berita->views }}</span>
+                                            </div>
                                     <h2><a href="{{ route('user.berita.baca', $berita->slug) }}">{{ $berita->title }}</a></h2>
                                 </div>
                             </div>
@@ -83,7 +88,43 @@
                     </div>
 
                     <!-- Trending Section -->
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
+                        <div class="aside-block">
+                            <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
+
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-latest" type="button" role="tab"
+                                        aria-controls="pills-latest" aria-selected="false">
+                                        Berita Populer
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="pills-tabContent">
+                                <!-- Popular -->
+                                <div class="tab-pane fade show active" id="pills-popular" role="tabpanel"
+                                    aria-labelledby="pills-popular-tab">
+                                    @foreach ($beritaPopuler as $populer)
+                                        <div class="post-entry-1 border-bottom">
+                                            <div class="post-meta">
+                                                <span class="date">{{ $populer->kategori->nama }}</span>
+                                                <span class="mx-1">&bullet;</span>
+                                                <span>{{ \Carbon\Carbon::parse($populer->created_at)->translatedFormat('d F Y') }}</span>
+                                            </div>
+                                            <h2 class="mb-2">
+                                                <a
+                                                    href="{{ route('user.berita.baca', $populer->slug) }}">{{ $populer->title }}</a>
+                                            </h2>
+                                            <span class="author mb-3 d-block">{{ $populer->user->name }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <!-- End Popular -->
+                            </div>
+                        </div>
+
+
                         <div class="trending">
                             <h3>Kategori</h3>
                             <ul class="trending-post">

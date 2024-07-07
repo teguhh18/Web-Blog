@@ -36,8 +36,13 @@
                             <div class="comment d-flex mb-4">
                                 <div class="flex-shrink-0">
                                     <div class="avatar avatar-sm rounded-circle">
+                                        @if($comments->user->foto)
                                         <img class="avatar-img" src="{{ asset('storage/' . $comments->user->foto) }}" alt=""
                                             class="img-fluid" />
+                                        @else
+                                        <img class="avatar-img" src="{{ asset('user/img/person-1.jpg') }}" alt=""
+                                            class="img-fluid" />
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="flex-grow-1 ms-2 ms-sm-3">

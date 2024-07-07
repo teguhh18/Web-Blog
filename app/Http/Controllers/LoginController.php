@@ -80,37 +80,34 @@ class LoginController extends Controller
         ));
     }
 
+
     public function updateProfile(Request $request, $id)
     {
-        
         $user = User::Where('id', decrypt($id))->firstOrFail();
-        // dd($user);
+
         $rules = [
             'name' => 'required|max:255',
-            // 'email' => 'required|unique:users',
-            // 'foto' => 'image'
+            'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ];
 
-       
-        if($request->email != $user->email) {
-            $rules['email'] = 'required|unique:users';
+        if ($request->email != $user->email) {
+            $rules['email'] = 'required|email|unique:users,email';
         }
 
         $validatedData = $request->validate($rules);
 
-        if ($request->file('foto')) {
+        if ($request->hasFile('foto')) {
             if ($user->foto) {
                 Storage::delete('public/' . $user->foto);
             }
             $validatedData['foto'] = $request->file('foto')->store('foto-users', 'public');
-            
         }
 
-        User::where('id', $user->id)
-                ->update($validatedData);
+        $user->update($validatedData);
 
         return redirect()->route('user.profile', $id)->with('success', 'Profile Berhasil Diubah!!');
     }
+
 
     public function updatePassword(Request $request, $id)
     {
