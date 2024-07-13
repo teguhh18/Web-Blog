@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('slug');
             $table->text('berita');
             $table->string('foto')->nullable();
+            $table->bigInteger('views')->default(0);
             $table->timestamps();
         });
     }
