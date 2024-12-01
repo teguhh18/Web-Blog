@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreBeritaRequest;
 use App\Http\Requests\UpdateBeritaRequest;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
+
 
 class BeritaController extends Controller
 {
@@ -17,8 +20,8 @@ class BeritaController extends Controller
     public function index()
     {
         $title = "Data Berita";
-        $dataBerita = Berita::orderBy('created_at', 'desc')->get();
-
+        $dataBerita = Berita::with(['kategori','user'])->orderBy('created_at', 'desc')->get();
+        // dd($dataBerita);
 
         return view('admin.berita.index', compact(
             'title',
@@ -32,7 +35,7 @@ class BeritaController extends Controller
     public function create()
     {
         $title = "Tambah Berita";
-        $dataKategori = Kategori::all();
+        $dataKategori = Kategori::select('id','nama')->get();
 
         return view('admin.berita.create', compact(
             'title',
@@ -51,18 +54,18 @@ class BeritaController extends Controller
             'berita' => 'required',
             'foto' => 'required|image',
         ]);
-    
+
         if ($request->file('foto')) {
             $validatedData['foto'] = $request->file('foto')->store('foto-berita', 'public');
         }
-    
+
         $validatedData['user_id'] = auth()->user()->id;
-    
+
         Berita::create($validatedData);
-    
+
         return redirect()->route('admin.berita.index')->with('success', 'Berita Berhasil Ditambah!!');
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -108,9 +111,9 @@ class BeritaController extends Controller
             "berita" => 'required',
             'foto' => 'image',
         ]);
-        
+
         if ($request->file('foto')) {
-           
+
             if ($dataBerita->foto) {
                 Storage::delete('public/' . $dataBerita->foto);
             }
@@ -122,9 +125,9 @@ class BeritaController extends Controller
         $dataBerita->title = $validatedData['title'];
         $dataBerita->kategori_id = $validatedData['kategori_id'];
         $dataBerita->berita = $validatedData['berita'];
-        
+
         $dataBerita->save();
-        
+
         return redirect()->route('admin.berita.index')->with('success', 'Berita Berhasil Diubah!!');
     }
 
@@ -140,5 +143,44 @@ class BeritaController extends Controller
         }
         Berita::where("id", $berita->id)->delete();
         return back()->with(['msg' => 'Berhasil Menghapus Data', 'class' => 'alert-success']);
+    }
+
+
+    public function generateTopik()
+    {
+        $title = "Buat Postingan Dengan AI";
+        return  view('admin.berita.ai.create', compact(
+            'title'
+        ));
+    }
+
+    public function generateBerita(Request $request)
+    {
+        $dataKategori = Kategori::all();
+        $validatedData  = $request->validate([
+            'topik'     => 'required|max:255',
+        ]);
+        $topik = $validatedData['topik'];
+        $process = new Process(['python', base_path('app/python/generate-post.py'), $topik]);
+        $process->run();
+
+        // Periksa apakah eksekusi berhasil
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        // Parsing output JSON dari Python
+        $output = json_decode($process->getOutput(), true);
+
+        if (isset($output['error'])) {
+            return redirect()->back()->with('error', 'Gagal membuat artikel dengan AI: ' . $output['error']);
+        }
+
+        // Arahkan ke view form edit dengan artikel
+        return view('admin.berita.ai.edit', [
+            'topik' => $topik,
+            'post' => $output['artikel'],
+            'dataKategori' => $dataKategori,
+        ]);
     }
 }

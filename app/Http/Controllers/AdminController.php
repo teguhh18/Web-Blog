@@ -29,7 +29,7 @@ class AdminController extends Controller
     public function adminProfile($id)
     {
         $title = "Profile";
-        $user = User::Where('id', decrypt($id))->firstOrFail();
+        $user = User::select('id','name','email','foto')->Where('id', decrypt($id))->firstOrFail();
         // dd($user);
         return view('admin.profile', compact(
             'title',
