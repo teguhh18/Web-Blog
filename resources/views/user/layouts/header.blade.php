@@ -2,7 +2,7 @@
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
         <a href="{{ route('user.home') }}" class="logo d-flex align-items-center">
-            <h1>PustikBlog</h1>
+            <h1>MyBlog</h1>
         </a>
 
         <nav id="navbar" class="navbar">

@@ -73,7 +73,8 @@ class LoginController extends Controller
     public function userProfile($id)
     {
         $title = "Profile User";
-        $user = User::where('id', decrypt($id))->firstOrFail();
+        $user = User::select('name','email','foto')->where('id', decrypt($id))->firstOrFail();
+        // dd($user);
         return  view('user.myProfile', compact(
             'title',
             'user'
@@ -87,7 +88,7 @@ class LoginController extends Controller
 
         $rules = [
             'name' => 'required|max:255',
-            'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'foto' => 'image|mimes:jpeg,png,jpg,svg|max:2048'
         ];
 
         if ($request->email != $user->email) {

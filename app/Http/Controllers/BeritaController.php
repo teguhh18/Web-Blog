@@ -145,42 +145,4 @@ class BeritaController extends Controller
         return back()->with(['msg' => 'Berhasil Menghapus Data', 'class' => 'alert-success']);
     }
 
-
-    public function generateTopik()
-    {
-        $title = "Buat Postingan Dengan AI";
-        return  view('admin.berita.ai.create', compact(
-            'title'
-        ));
-    }
-
-    public function generateBerita(Request $request)
-    {
-        $dataKategori = Kategori::all();
-        $validatedData  = $request->validate([
-            'topik'     => 'required|max:255',
-        ]);
-        $topik = $validatedData['topik'];
-        $process = new Process(['python', base_path('app/python/generate-post.py'), $topik]);
-        $process->run();
-
-        // Periksa apakah eksekusi berhasil
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-
-        // Parsing output JSON dari Python
-        $output = json_decode($process->getOutput(), true);
-
-        if (isset($output['error'])) {
-            return redirect()->back()->with('error', 'Gagal membuat artikel dengan AI: ' . $output['error']);
-        }
-
-        // Arahkan ke view form edit dengan artikel
-        return view('admin.berita.ai.edit', [
-            'topik' => $topik,
-            'post' => $output['artikel'],
-            'dataKategori' => $dataKategori,
-        ]);
-    }
 }

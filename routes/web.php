@@ -71,16 +71,11 @@ Route::put('/userPassword/update/{id}',[LoginController::class, 'updatePassword'
 
 
 // RESET PASSWORD
-Route::get('forgot-password', [PasswordResetController::class, 'showForgotForm'])->name('password.forgot');
-Route::post('forgot-password', [PasswordResetController::class, 'sendOTP'])->name('password.email');
+Route::get('/forgot-password', [PasswordResetController::class, 'showForgotForm'])->name('password.forgot');
+Route::post('/forgot-password', [PasswordResetController::class, 'sendOTP'])->name('password.email');
 
 Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
 
 
-
-// AI GENERATE POST
-Route::get('/berita/ai-topik', [BeritaController::class, 'generateTopik'])->name('topik.berita');
-Route::post('/berita/generate', [BeritaController::class, 'generateBerita'])->name('generate.berita');
-Route::post('/berita/simpan', [BeritaController::class, 'simpanBerita'])->name('berita.simpan');
 

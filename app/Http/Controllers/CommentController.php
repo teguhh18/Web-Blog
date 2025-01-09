@@ -37,6 +37,9 @@ class CommentController extends Controller
         $validatedData = $request->validate([
             'comment' => 'required|max:255',
         ]);
+        if($validatedData['comment'] == null){
+            return redirect()->route('user.berita.baca', $berita->slug)->with('error', 'Komentar Tidak Boleh Kosong!!');
+        }
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['berita_id'] = $berita->id;
         // Menyimpan data kategori

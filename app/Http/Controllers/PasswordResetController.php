@@ -20,10 +20,10 @@ class PasswordResetController extends Controller
 
     public function sendOTP(Request $request)
     {
-        // dd($request);
+        // dd($request->email);
         $request->validate(['email' => 'required|email|exists:users,email']);
 
-        $token = Str::random(30); // Generate a random 6 character token
+        $token = Str::random(30); // Generate a random 30 character token
         DB::table('password_reset_tokens')->updateOrInsert(
             ['email' => $request->email],
             ['token' => $token, 'created_at' => Carbon::now()]
@@ -31,12 +31,16 @@ class PasswordResetController extends Controller
 
         session()->put('email', $request->email);
         // Send OTP email
-        Mail::send('auth.otp', ['token' => $token], function ($message) use ($request) {
-            $message->to($request->email);
-            $message->subject('Password Reset OTP');
-        });
+        try {
+            Mail::send('auth.otp', ['token' => $token], function ($message) use ($request) {
+                $message->to($request->email);
+                $message->subject('Password Reset OTP');
+            });
 
-        return redirect()->route('password.forgot')->with('success', 'Cek Emailmu!!, Kami sudah mengirim link untuk reset password .');
+            return redirect()->route('password.forgot')->with('success', 'Cek Emailmu!!, Kami sudah mengirim link untuk reset password.');
+        } catch (\Exception $e) {
+            return redirect()->route('password.forgot')->with('error', 'Gagal mengirim email. Silakan coba lagi.');
+        }
     }
 
 
