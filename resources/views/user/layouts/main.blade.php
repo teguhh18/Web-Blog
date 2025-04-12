@@ -8,6 +8,8 @@
   <title>MyBlog - {{ $title }}</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
 
   <!-- Favicons -->
   <link href="{{ asset ('user/img/Tekno.png') }}" rel="icon">
