@@ -146,3 +146,4 @@ class BeritaController extends Controller
     }
 
 }
+

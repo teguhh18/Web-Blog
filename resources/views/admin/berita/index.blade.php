@@ -3,7 +3,7 @@
 @section('main')
     <div class="container mt-4">
         <a href="{{ route('admin.berita.create') }}" class="btn btn-primary mb-3"> <i class="bi bi-plus-circle-fill"></i> Tambah</a>
-        <a href="{{ route('topik.berita') }}" class="btn btn-secondary mb-3"> <i class="bi bi-plus-circle-fill"></i> Buat Dengan AI</a>
+        {{-- <a href="{{ route('topik.berita') }}" class="btn btn-secondary mb-3"> <i class="bi bi-plus-circle-fill"></i> Buat Dengan AI</a> --}}
 
         <div>
             @if (session()->has('success'))
