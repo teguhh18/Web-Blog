@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class LoginController extends Controller
 {
@@ -88,12 +89,9 @@ class LoginController extends Controller
 
         $rules = [
             'name' => 'required|max:255',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
             'foto' => 'image|mimes:jpeg,png,jpg,svg|max:2048'
         ];
-
-        if ($request->email != $user->email) {
-            $rules['email'] = 'required|email|unique:users,email';
-        }
 
         $validatedData = $request->validate($rules);
 

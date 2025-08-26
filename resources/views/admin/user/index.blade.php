@@ -31,9 +31,15 @@
                                 <td>{{ $users->name }}</td>
                                 <td>{{ $users->email }}</td>
                                 <td>{{ $users->level }}</td>
-                                <td class="text-center">
+                                @if ($users->foto)
+                                    <td class="text-center">
                                     <img src="{{ asset('storage/' . $users->foto) }}" alt="" class="img-fluid img-thumbnail rounded-circle" style="max-height: 90px;">
                                 </td>
+                                @else
+                                <td class="text-center">
+                                   No Image
+                                </td>
+                                @endif
 
                                 <td>
                                     <a href="{{ route('admin.user.edit', $users->id) }}" class="btn btn-primary"> <i

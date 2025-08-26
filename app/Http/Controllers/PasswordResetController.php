@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PasswordResetController extends Controller
@@ -37,9 +38,10 @@ class PasswordResetController extends Controller
                 $message->subject('Password Reset OTP');
             });
 
-            return redirect()->route('password.forgot')->with('success', 'Cek Emailmu!!, Kami sudah mengirim link untuk reset password.');
+            return redirect()->route('password.forgot')->with('msg', 'Cek Emailmu!!, Kami sudah mengirim link untuk reset password.');
         } catch (\Exception $e) {
-            return redirect()->route('password.forgot')->with('error', 'Gagal mengirim email. Silakan coba lagi.');
+            Log::error('Error sending OTP email: ' . $e->getMessage());
+            return redirect()->route('password.forgot')->with('msg', 'Gagal mengirim email. Silakan coba lagi.');
         }
     }
 

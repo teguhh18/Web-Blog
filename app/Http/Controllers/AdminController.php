@@ -7,6 +7,7 @@ use App\Models\Kategori;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
@@ -16,7 +17,7 @@ class AdminController extends Controller
         $berita = Berita::count();
         $kategori = Kategori::count();
         $user = User::count();
-        $dataBerita = Berita::orderBy('created_at', 'desc')->paginate(5);
+        $dataBerita = Berita::with('kategori')->orderBy('created_at', 'desc')->paginate(5);
         return view('admin.home', compact(
             'title',
             'berita',
@@ -30,7 +31,6 @@ class AdminController extends Controller
     {
         $title = "Profile";
         $user = User::select('id','name','email','foto')->Where('id', decrypt($id))->firstOrFail();
-        // dd($user);
         return view('admin.profile', compact(
             'title',
             'user',
@@ -39,16 +39,13 @@ class AdminController extends Controller
 
     public function updateProfile(Request $request, $id)
     {$user = User::Where('id', decrypt($id))->firstOrFail();
-        // dd($user);
         $rules = [
             'name' => 'required|max:255',
-            // 'email' => 'required|unique:users',
-            // 'foto' => 'image'
         ];
 
        
         if($request->email != $user->email) {
-            $rules['email'] = 'required|unique:users';
+            $rules['email'] = ['required', 'email', Rule::unique('users')->ignore($user->id)];
         }
 
         $validatedData = $request->validate($rules);
@@ -71,7 +68,6 @@ class AdminController extends Controller
         $user = User::findOrFail(decrypt($id));
 
         $validatedData = $request->validate([
-            // 'password' => 'required',
             'newpassword' => 'required',
             'renewpassword' => 'required',
         ]);

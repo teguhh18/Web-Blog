@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Kategori;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreKategoriRequest;
-use App\Http\Requests\UpdateKategoriRequest;
 use Illuminate\Support\Facades\Storage;
 
 class KategoriController extends Controller
@@ -17,7 +15,6 @@ class KategoriController extends Controller
     {
         $title = "Data Kategori";
         $dataKategori = Kategori::all();
-        // dd($dataKategori);
 
         return view('admin.kategori.index', compact(
             'title',
@@ -76,7 +73,7 @@ class KategoriController extends Controller
     public function edit($id)
     {
         $title = "Edit Data Kategori";
-        $kategori = Kategori::where('id', $id)->first();
+        $kategori = Kategori::findOrFail($id);
         return  view('admin.kategori.edit', compact(
             'title',
             'kategori'
@@ -93,7 +90,7 @@ class KategoriController extends Controller
     // Validasi input
     $validatedData = $request->validate([
         'nama' => 'required|max:255',
-        'foto' => 'image',
+        'foto' => 'image|file|2048',
     ]);
 
     // Menyimpan file foto jika ada
@@ -119,8 +116,7 @@ class KategoriController extends Controller
      */
     public function destroy($id)
     {
-        $kategori = Kategori::where("id", $id)->first();
-        // dd($kategori);
+        $kategori = Kategori::findOrFail($id);
         if ($kategori->foto) {
             Storage::delete('public/' . $kategori->foto);
         }

@@ -5,11 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Berita;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreBeritaRequest;
-use App\Http\Requests\UpdateBeritaRequest;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 
 class BeritaController extends Controller
@@ -21,8 +17,6 @@ class BeritaController extends Controller
     {
         $title = "Data Berita";
         $dataBerita = Berita::with(['kategori','user'])->orderBy('created_at', 'desc')->get();
-        // dd($dataBerita);
-
         return view('admin.berita.index', compact(
             'title',
             'dataBerita'
@@ -89,7 +83,7 @@ class BeritaController extends Controller
     public function edit(Berita $berita, $id)
     {
         $title = "Edit Berita";
-        $dataKategori = Kategori::all();
+        $dataKategori = Kategori::select('id','nama')->get();
         $berita = Berita::where('id', $id)->first();
         return  view('admin.berita.edit', compact(
             'title',
@@ -103,13 +97,12 @@ class BeritaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $kategori = Kategori::findOrFail($id);
         $dataBerita = Berita::where("id", $id)->first();
         $validatedData  = $request->validate([
             'title'     => 'required|max:255',
             "kategori_id" => 'required',
             "berita" => 'required',
-            'foto' => 'image',
+            'foto' => 'image|file|2048',
         ]);
 
         if ($request->file('foto')) {
@@ -136,8 +129,7 @@ class BeritaController extends Controller
      */
     public function destroy($id)
     {
-        $berita = Berita::where("id", $id)->first();
-        // dd($berita);
+        $berita = Berita::findOrFail($id);
         if ($berita->foto) {
             Storage::delete('public/' . $berita->foto);
         }

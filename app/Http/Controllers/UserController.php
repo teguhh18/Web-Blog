@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -15,8 +17,6 @@ class UserController extends Controller
     {
         $title = "Data User";
         $dataUser = User::all();
-        // dd($dataKategori);
-
         return view('admin.user.index', compact(
             'title',
             'dataUser'
@@ -29,8 +29,6 @@ class UserController extends Controller
     public function create()
     {
         $title = "Tambah User";
-
-
         return view('admin.user.create', compact(
             'title'
         ));
@@ -41,7 +39,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         // Validasi input
         $validatedData = $request->validate([
             'name' => 'required|max:255',
@@ -56,11 +53,10 @@ class UserController extends Controller
             $validatedData['foto'] = $request->file('foto')->store('foto-users', 'public');
         }
 
-        $validatedData['password'] = bcrypt($request->password);
-        
+        $validatedData['password'] = Hash::make($request->password);
+
         User::create($validatedData);
 
-        // Redirect dengan pesan sukses
         return redirect()->route('admin.user.index')->with('success', 'Data User Berhasil Ditambah!!');
     }
 
@@ -91,14 +87,12 @@ class UserController extends Controller
     {
         $rules = [
             'name' => 'required|max:255',
-            // 'email' => 'required|unique:users',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
             'level' => 'required',
             'foto' => 'image'
         ];
 
-        
-
-        if($request->email != $user->email) {
+        if ($request->email != $user->email) {
             $rules['email'] = 'required|unique:users';
         }
 
@@ -109,11 +103,10 @@ class UserController extends Controller
                 Storage::delete('public/' . $user->foto);
             }
             $validatedData['foto'] = $request->file('foto')->store('foto-users', 'public');
-            
         }
 
         User::where('id', $user->id)
-                ->update($validatedData);
+            ->update($validatedData);
 
         return redirect()->route('admin.user.index')->with('success', 'Data User Berhasil Diubah!!');
     }
@@ -123,8 +116,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-         // Hapus foto lama 
-         if($user->foto) {
+        // Hapus foto lama 
+        if ($user->foto) {
             Storage::delete('public/' . $user->foto);
         }
         User::destroy($user->id);
