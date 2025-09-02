@@ -9,6 +9,7 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\RoleAIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +21,6 @@ use App\Http\Controllers\PasswordResetController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 // ADMIN
 Route::get('/register',[LoginController::class, 'register'])->name('register')->middleware('guest');
@@ -43,13 +40,12 @@ Route::put('/password/update/{id}',[AdminController::class, 'updatePassword'])->
 Route::get('/admin/home',[AdminController::class, 'index'])->middleware('auth_admin')->name('admin.home');
 
 Route::resource('/admin/kategori', KategoriController::class)->middleware('auth_admin')->names('admin.kategori');
+Route::resource('/admin/role-ai', RoleAIController::class)->middleware('auth_admin')->names('admin.role-ai');
 
 Route::get('/admin/berita/ai', [BeritaController::class, 'berita_ai'])->middleware('auth_admin')->name('admin.ai');
 Route::get('/admin/berita/ai/generate', [BeritaController::class, 'berita_ai_generate'])->middleware('auth_admin')->name('admin.ai.generate');
 Route::resource('/admin/berita', BeritaController::class)->middleware('auth_admin')->names('admin.berita');
 Route::resource('/admin/user', UserController::class)->middleware('auth_admin')->names('admin.user');
-
-
 
 
 // USER

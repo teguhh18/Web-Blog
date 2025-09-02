@@ -16,6 +16,12 @@
         </li><!-- End Profile Page Nav -->
         
         <li class="nav-item">
+            <a class="nav-link {{ request()->is('admin/role-ai*') ? '' : 'collapsed' }}" href="{{ route('admin.role-ai.index') }}">
+                <i class="bi bi-lightning-fill"></i>
+                <span>Role AI</span>
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {{ request()->is('admin/berita*') ? '' : 'collapsed' }}" href="{{ route('admin.berita.index') }}">
                 <i class="bi bi-newspaper"></i>
                 <span>Berita</span>
@@ -31,4 +37,4 @@
 
     </ul>
 
-</aside><!-- End Sidebar-->
+</aside>
