@@ -31,11 +31,11 @@
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
-    
+
     {{-- Rich Editor --}}
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
     <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
-      
+
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -67,10 +67,6 @@
                     </a>
                 </li><!-- End Search Icon-->
 
-                
-
-               
-
                 </li><!-- End Messages Nav -->
 
                 <li class="nav-item dropdown pe-3">
@@ -91,7 +87,8 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.profile', encrypt(auth()->user()->id)) }}">
+                            <a class="dropdown-item d-flex align-items-center"
+                                href="{{ route('admin.profile', encrypt(auth()->user()->id)) }}">
                                 <i class="bi bi-person"></i>
                                 <span>My Profile</span>
                             </a>
@@ -100,7 +97,7 @@
                             <hr class="dropdown-divider">
                         </li>
 
-                        
+
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -165,10 +162,12 @@
     <script src="{{ asset('admin/vendor/simple-datatables/simple-datatables.js') }}"></script>
     <script src="{{ asset('admin/vendor/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ asset('admin/vendor/php-email-form/validate.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <!-- Template Main JS File -->
     <script src="{{ asset('admin/js/main.js') }}"></script>
-
+    @stack('js')
 </body>
 
 </html>

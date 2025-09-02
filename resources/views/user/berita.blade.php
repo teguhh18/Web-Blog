@@ -11,7 +11,10 @@
                 <div class="row g-5">
                     <div class="col-lg-10">
                         <div class="row d-flex flex-wrap">
-                            @foreach($dataBerita as $berita)
+                            @if ($dataBerita->isEmpty())
+                                <p class="text-center">Tidak ada berita terbaru.</p>
+                            @else
+                             @foreach($dataBerita as $berita)
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="post-entry-1">
                                     <a href="{{ route('user.berita.baca', $berita->slug) }}"><img src="{{ asset('storage/' . $berita->foto) }}"
@@ -27,6 +30,8 @@
                                 </div>
                             </div>
                             @endforeach
+                            @endif
+                           
                         </div>
                         <div class="text-start py-4">
                             {{ $dataBerita->links() }}

@@ -44,6 +44,8 @@ Route::get('/admin/home',[AdminController::class, 'index'])->middleware('auth_ad
 
 Route::resource('/admin/kategori', KategoriController::class)->middleware('auth_admin')->names('admin.kategori');
 
+Route::get('/admin/berita/ai', [BeritaController::class, 'berita_ai'])->middleware('auth_admin')->name('admin.ai');
+Route::get('/admin/berita/ai/generate', [BeritaController::class, 'berita_ai_generate'])->middleware('auth_admin')->name('admin.ai.generate');
 Route::resource('/admin/berita', BeritaController::class)->middleware('auth_admin')->names('admin.berita');
 Route::resource('/admin/user', UserController::class)->middleware('auth_admin')->names('admin.user');
 
