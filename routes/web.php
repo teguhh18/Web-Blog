@@ -30,10 +30,10 @@ Route::get('/login-user',[LoginController::class, 'login'])->name('login')->midd
 Route::post('/login-user',[LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('logout',[LoginController::class, 'logout'])->name('logout');
 
+Route::get('/profile/picture/',[AdminController::class, 'modalProfilePicture'])->name('admin.profile.image')->middleware('auth_admin');
+Route::post('/profile/picture/',[AdminController::class, 'ProfilePictureUpload'])->name('admin.profile.image.upload')->middleware('auth_admin');
 Route::get('/profile/{id}',[AdminController::class, 'adminProfile'])->name('admin.profile')->middleware('auth_admin');
-
 Route::put('/profile/update/{id}',[AdminController::class, 'updateProfile'])->name('admin.profile.update')->middleware('auth_admin');
-
 Route::put('/password/update/{id}',[AdminController::class, 'updatePassword'])->name('admin.password.update')->middleware('auth_admin');
 
 

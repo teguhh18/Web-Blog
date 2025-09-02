@@ -81,4 +81,34 @@ class AdminController extends Controller
 
         return redirect()->route('admin.profile', $id)->with('success', 'Password Berhasil Diubah');
     }
+
+    public function modalProfilePicture() {
+        $user_id = auth()->user()->id;
+        $dataUser = User::select('id','foto')->Where('id', $user_id)->firstOrFail();
+
+        $view = view('admin.profile-picture', [
+            'user' => $dataUser,
+        ])->render();
+
+        return response()->json(['html' => $view]);
+    }
+
+    public function ProfilePictureUpload(Request $request) {
+        $request->validate([
+            'foto' => 'required|image|max:2048',
+        ]);
+
+        $user_id = auth()->user()->id;
+        $dataUser = User::select('id','foto')->Where('id', $user_id)->firstOrFail();
+
+        if ($request->file('foto')) {
+            if ($dataUser->foto) {
+                Storage::delete('public/' . $dataUser->foto);
+            }
+            $dataUser->foto = $request->file('foto')->store('foto-users', 'public');
+        }
+        $dataUser->save();
+
+        return redirect()->route('admin.profile', $user_id)->with('success', 'Foto Profil Berhasil Diubah');
+    }
 }
