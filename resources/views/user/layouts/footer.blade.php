@@ -8,7 +8,7 @@
         <div class="row justify-content-between">
           <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
             <div class="copyright">
-              © Copyright <strong><span>PustikBlog</span>. All Rights Reserved</strong>. 
+              © Copyright <strong><span>MyBlog</span>. All Rights Reserved</strong>. 
             </div>
 
             {{-- <div class="credits">

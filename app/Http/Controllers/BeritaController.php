@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Berita;
 use App\Models\Kategori;
+use App\Models\RoleAI;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -142,35 +143,42 @@ class BeritaController extends Controller
     public function berita_ai()
     {
         $title = "Buat Berita Dengan AI";
+        $roleAi = RoleAI::all();
         $dataKategori = Kategori::all();
-        return view('admin.berita.ai.create', compact('title', 'dataKategori'));
+        return view('admin.berita.ai.create', compact('title', 'dataKategori', 'roleAi'));
     }
 
     function berita_ai_generate(Request $request)
     {
+
         $validatedData = $request->validate([
             'prompt' => 'required',
+            'role_ai' => 'required',
         ]);
 
+        $role = RoleAI::select('context')->where('id', $validatedData['role_ai'])->first();
         $response = Http::withHeaders([
             "Content-Type" => "application/json"
         ])->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" . env('GEMINI_API_KEY'), [
             "contents" => [
                 "parts" => [
-                    ["text" => $validatedData['prompt']]
+                    ["text" => $role->context . ' ' . $validatedData['prompt']]
                 ]
             ]
         ]);
 
         if ($response->successful()) {
             $text = $response->json()['candidates'][0]['content']['parts'][0]['text'];
+            return response()->json([
+                'status' => 'success',
+                'data' => $text
+            ]);
         } else {
             $text = "Something went wrong, Try again Later";
+            return response()->json([
+                'status' => 'error',
+                'data' => $text
+            ]);
         }
-
-       return response()->json([
-            'status' => 'success',
-            'data' => $text
-        ]);
     }
 }

@@ -12,7 +12,7 @@
 
 
   <!-- Favicons -->
-  <link href="{{ asset ('user/img/Tekno.png') }}" rel="icon">
+  <link href="{{ asset ('admin/img/logo.png') }}" rel="icon">
   <link href="{{ asset ('user/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->

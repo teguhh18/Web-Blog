@@ -11,7 +11,7 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
     <!-- Favicons -->
-    <link href="{{ asset('user/img/Tekno.png') }}" rel="icon">
+    <link href="{{ asset('admin/img/logo.png') }}" rel="icon">
     <link href="{{ asset('admin/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
@@ -45,8 +45,8 @@
 
         <div class="d-flex align-items-center justify-content-between">
             <a href="{{ route('admin.home') }}" class="logo d-flex align-items-center">
-                <img src="{{ asset('user/img/Tekno.png') }}" alt="">
-                <span class="d-none d-lg-block">Pustik</span>
+                <img src="{{ asset('admin/img/logo.png') }}" alt="">
+                <span class="d-none d-lg-block">MyBlog</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
@@ -142,7 +142,7 @@
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer mt-auto">
         <div class="copyright">
-            &copy; Copyright <strong><span>Pustik</span></strong>. All Rights Reserved
+            &copy; Copyright <strong><span>MyBlog</span></strong>. All Rights Reserved
         </div>
         {{-- <div class="credits">
 
@@ -167,6 +167,7 @@
 
     <!-- Template Main JS File -->
     <script src="{{ asset('admin/js/main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @stack('js')
 </body>
 
