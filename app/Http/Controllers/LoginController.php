@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -59,16 +60,19 @@ class LoginController extends Controller
             'password' => 'required|min:8|max:255'
         ]);
 
-        // enkripsi password
-        // $validatedData['password'] = bcrypt($validatedData['password']);
-        $validatedData['password'] = Hash::make($validatedData['password']);
-        $validatedData['level'] = "user";
+        DB::beginTransaction();
+        try{
+            // enkripsi password
+            $validatedData['password'] = Hash::make($validatedData['password']);
+            $validatedData['level'] = "user";
 
-        // Kirim data ke database
-        User::create($validatedData);
-
-        // Kembalikan ke halaman login dan beri pesan, Pesan disimpan di session
-        return redirect('/login')->with('success', 'Berhasil Buat Akun, Silahkan Login');
+            User::create($validatedData);
+            DB::commit();
+            return redirect()->route('login')->with(['msg' => 'Registrasi Berhasil!! Silahkan Login', 'class' => 'success']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with(['error' => 'Terjadi kesalahan, silahkan coba lagi', 'class' => 'danger']);
+        }
     }
 
     public function userProfile($id)
