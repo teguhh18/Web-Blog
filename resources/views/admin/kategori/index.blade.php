@@ -11,13 +11,16 @@
             @endif
         </div>
         <div class="card">
-            <table class="table table-bordered datatable">
-                <thead>
+            <div class="card-header">
+                <h5 class="card-title mb-0">{{ $title }}</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-hover datatable">
+                <thead class="table-dark">
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
                         <th>Foto</th>
-                        
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -63,6 +66,8 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
+            
         </div>
     </div>
 @endsection

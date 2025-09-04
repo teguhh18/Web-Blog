@@ -92,7 +92,7 @@ class AdminController extends Controller
 
         return response()->json(['html' => $view]);
     }
-
+    
     public function ProfilePictureUpload(Request $request) {
         $request->validate([
             'foto' => 'required|image|max:2048',
@@ -109,6 +109,6 @@ class AdminController extends Controller
         }
         $dataUser->save();
 
-        return redirect()->route('admin.profile', $user_id)->with('success', 'Foto Profil Berhasil Diubah');
+        return redirect()->route('admin.profile', encrypt($user_id))->with('success', 'Foto Profil Berhasil Diubah');
     }
 }

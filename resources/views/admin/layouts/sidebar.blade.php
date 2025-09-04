@@ -28,6 +28,12 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link {{ request()->is('admin/comment*') ? '' : 'collapsed' }}" href="{{ route('admin.comment.index') }}">
+                <i class="bi bi-chat-dots"></i>
+                <span>Data Comment</span>
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {{ request()->is('admin/user*') ? '' : 'collapsed' }}" href="{{ route('admin.user.index') }}">
                 <i class="bi bi-person"></i>
                 <span>Data User</span>

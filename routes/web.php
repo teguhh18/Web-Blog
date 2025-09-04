@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\RoleAIController;
@@ -30,8 +31,8 @@ Route::get('/login-user',[LoginController::class, 'login'])->name('login')->midd
 Route::post('/login-user',[LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('logout',[LoginController::class, 'logout'])->name('logout');
 
-Route::get('/profile/picture/',[AdminController::class, 'modalProfilePicture'])->name('admin.profile.image')->middleware('auth_admin');
-Route::post('/profile/picture/',[AdminController::class, 'ProfilePictureUpload'])->name('admin.profile.image.upload')->middleware('auth_admin');
+Route::get('/admin/profile/picture/',[AdminController::class, 'modalProfilePicture'])->name('admin.profile.image')->middleware('auth_admin');
+Route::post('/admin/profile/picture/',[AdminController::class, 'ProfilePictureUpload'])->name('admin.profile.image.upload')->middleware('auth_admin');
 Route::get('/profile/{id}',[AdminController::class, 'adminProfile'])->name('admin.profile')->middleware('auth_admin');
 Route::put('/profile/update/{id}',[AdminController::class, 'updateProfile'])->name('admin.profile.update')->middleware('auth_admin');
 Route::put('/password/update/{id}',[AdminController::class, 'updatePassword'])->name('admin.password.update')->middleware('auth_admin');
@@ -46,6 +47,7 @@ Route::get('/admin/berita/ai', [BeritaController::class, 'berita_ai'])->middlewa
 Route::get('/admin/berita/ai/generate', [BeritaController::class, 'berita_ai_generate'])->middleware('auth_admin')->name('admin.ai.generate');
 Route::resource('/admin/berita', BeritaController::class)->middleware('auth_admin')->names('admin.berita');
 Route::resource('/admin/user', UserController::class)->middleware('auth_admin')->names('admin.user');
+Route::resource('/admin/comment', AdminCommentController::class)->middleware('auth_admin')->names('admin.comment');
 
 
 // USER
