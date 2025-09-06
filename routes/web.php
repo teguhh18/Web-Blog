@@ -24,21 +24,21 @@ use App\Http\Controllers\RoleAIController;
 */
 
 // ADMIN
-Route::get('/register',[LoginController::class, 'register'])->name('register')->middleware('guest');
-Route::post('/register/store',[LoginController::class, 'registerStore'])->name('register.store')->middleware('guest');
+Route::get('/register', [LoginController::class, 'register'])->name('register')->middleware('guest');
+Route::post('/register/store', [LoginController::class, 'registerStore'])->name('register.store')->middleware('guest');
 
-Route::get('/login-user',[LoginController::class, 'login'])->name('login')->middleware('guest');
-Route::post('/login-user',[LoginController::class, 'authenticate'])->name('authenticate');
-Route::post('logout',[LoginController::class, 'logout'])->name('logout');
+Route::get('/login-user', [LoginController::class, 'login'])->name('login')->middleware('guest');
+Route::post('/login-user', [LoginController::class, 'authenticate'])->name('authenticate');
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/admin/profile/picture/',[AdminController::class, 'modalProfilePicture'])->name('admin.profile.image')->middleware('auth_admin');
-Route::post('/admin/profile/picture/',[AdminController::class, 'ProfilePictureUpload'])->name('admin.profile.image.upload')->middleware('auth_admin');
-Route::get('/profile/{id}',[AdminController::class, 'adminProfile'])->name('admin.profile')->middleware('auth_admin');
-Route::put('/profile/update/{id}',[AdminController::class, 'updateProfile'])->name('admin.profile.update')->middleware('auth_admin');
-Route::put('/password/update/{id}',[AdminController::class, 'updatePassword'])->name('admin.password.update')->middleware('auth_admin');
+Route::get('/admin/profile/picture/', [AdminController::class, 'modalProfilePicture'])->name('admin.profile.image')->middleware('auth_admin');
+Route::post('/admin/profile/picture/', [AdminController::class, 'ProfilePictureUpload'])->name('admin.profile.image.upload')->middleware('auth_admin');
+Route::get('/profile/{id}', [AdminController::class, 'adminProfile'])->name('admin.profile')->middleware('auth_admin');
+Route::put('/profile/update/{id}', [AdminController::class, 'updateProfile'])->name('admin.profile.update')->middleware('auth_admin');
+Route::put('/password/update/{id}', [AdminController::class, 'updatePassword'])->name('admin.password.update')->middleware('auth_admin');
 
 
-Route::get('/admin/home',[AdminController::class, 'index'])->middleware('auth_admin')->name('admin.home');
+Route::get('/admin/home', [AdminController::class, 'index'])->middleware('auth_admin')->name('admin.home');
 
 Route::resource('/admin/kategori', KategoriController::class)->middleware('auth_admin')->names('admin.kategori');
 Route::resource('/admin/role-ai', RoleAIController::class)->middleware('auth_admin')->names('admin.role-ai');
@@ -51,23 +51,22 @@ Route::resource('/admin/comment', AdminCommentController::class)->middleware('au
 
 
 // USER
-Route::get('/',[HomeController::class, 'index'])->name('user.home');
-Route::get('/about',[HomeController::class, 'about'])->name('user.about');
-Route::get('/contact',[HomeController::class, 'contact'])->name('user.contact');
+Route::get('/', [HomeController::class, 'index'])->name('user.home');
+Route::get('/about', [HomeController::class, 'about'])->name('user.about');
+Route::get('/contact', [HomeController::class, 'contact'])->name('user.contact');
 
-Route::get('/berita',[HomeController::class, 'berita'])->name('user.berita');
-Route::get('/bacaBerita/{slug}',[HomeController::class, 'beritaBaca'])->name('user.berita.baca');
+Route::get('/berita', [HomeController::class, 'berita'])->name('user.berita');
+Route::get('/bacaBerita/{slug}', [HomeController::class, 'beritaBaca'])->name('user.berita.baca');
 
-Route::get('/kategori',[HomeController::class, 'listKategori'])->name('user.kategori');
-Route::get('/berita/kategori/{slug}',[HomeController::class, 'beritaByKategori'])->name('user.berita.kategori');
+Route::get('/kategori', [HomeController::class, 'listKategori'])->name('user.kategori');
+Route::get('/berita/kategori/{slug}', [HomeController::class, 'beritaByKategori'])->name('user.berita.kategori');
 
 Route::post('/comment/{slug}', [CommentController::class, 'store'])->name('user.comment.store')->middleware('auth');
 
 Route::get('/userProfile/{id}', [LoginController::class, 'userProfile'])->name('user.profile')->middleware('auth');
 
-Route::put('/userProfile/update/{id}',[LoginController::class, 'updateProfile'])->name('user.profile.update')->middleware('auth');
-Route::put('/userPassword/update/{id}',[LoginController::class, 'updatePassword'])->name('user.password.update')->middleware('auth');
-
+Route::put('/user/profile/update/{id}', [LoginController::class, 'updateProfile'])->name('user.profile.update')->middleware('auth');
+Route::put('/user/profile/password/{id}', [LoginController::class, 'updatePassword'])->name('user.password.update')->middleware('auth');
 
 
 // RESET PASSWORD
@@ -76,6 +75,3 @@ Route::post('/forgot-password', [PasswordResetController::class, 'sendOTP'])->na
 
 Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
-
-
-

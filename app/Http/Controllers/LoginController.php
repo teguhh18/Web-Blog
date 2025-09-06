@@ -40,7 +40,7 @@ class LoginController extends Controller
         }
 
         // Gagal, kembali ke halaman login dan memberi pesan Login Failed.
-        return back()->with('loginError', 'Login Gagal');
+        return back()->with(['msg' => 'Login Failed!! Silahkan Cek Kembali Email dan Password Anda', 'class' => 'danger']);
     }
 
 
@@ -78,8 +78,7 @@ class LoginController extends Controller
     public function userProfile($id)
     {
         $title = "Profile User";
-        $user = User::select('name','email','foto')->where('id', decrypt($id))->firstOrFail();
-        // dd($user);
+        $user = User::select('id','name','email','foto')->where('id', decrypt($id))->firstOrFail();
         return  view('user.myProfile', compact(
             'title',
             'user'
@@ -108,7 +107,7 @@ class LoginController extends Controller
 
         $user->update($validatedData);
 
-        return redirect()->route('user.profile', $id)->with('success', 'Profile Berhasil Diubah!!');
+        return back()->with('success', 'Profile Berhasil Diubah!!');
     }
 
 
