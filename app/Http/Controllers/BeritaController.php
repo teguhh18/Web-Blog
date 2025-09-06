@@ -150,7 +150,6 @@ class BeritaController extends Controller
 
     function berita_ai_generate(Request $request)
     {
-
         $validatedData = $request->validate([
             'prompt' => 'required',
             'role_ai' => 'required',
@@ -180,5 +179,29 @@ class BeritaController extends Controller
                 'data' => $text
             ]);
         }
+    }
+
+    public function generate_image(Request $request)
+    {
+        $request->validate([
+            'text' => 'required|string',
+        ]);
+
+        $prompt_image = Http::withHeaders([
+            "Content-Type" => "application/json"
+        ])->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" . env('GEMINI_API_KEY'), [
+            "contents" => [
+                "parts" => [
+                    ["text" => 'Buatkan Prompt untuk generate image yang realistis berdasarkan teks berikut: ' . $request->text . 'jangan berikan respon selain prompt, hanya berikan prompt nya saja.']
+                ]
+            ]
+        ]);
+
+        if ($prompt_image->successful()) {
+            $text = $prompt_image->json()['candidates'][0]['content']['parts'][0]['text'];
+        } else {
+            return back()->with('error', 'Gagal membuat prompt gambar, coba lagi.');
+        }
+       
     }
 }

@@ -45,6 +45,7 @@ Route::resource('/admin/role-ai', RoleAIController::class)->middleware('auth_adm
 
 Route::get('/admin/berita/ai', [BeritaController::class, 'berita_ai'])->middleware('auth_admin')->name('admin.ai');
 Route::get('/admin/berita/ai/generate', [BeritaController::class, 'berita_ai_generate'])->middleware('auth_admin')->name('admin.ai.generate');
+Route::get('/admin/berita/ai/generate/image', [BeritaController::class, 'generate_image'])->middleware('auth_admin')->name('admin.ai.generate.image');
 Route::resource('/admin/berita', BeritaController::class)->middleware('auth_admin')->names('admin.berita');
 Route::resource('/admin/user', UserController::class)->middleware('auth_admin')->names('admin.user');
 Route::resource('/admin/comment', AdminCommentController::class)->middleware('auth_admin')->names('admin.comment');

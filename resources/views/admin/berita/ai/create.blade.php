@@ -76,10 +76,15 @@
 
                     <div class="row mb-3">
                         <label for="foto" class="col-sm-2 col-form-label">Foto Berita</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-5">
                             <input class="form-control" type="file" id="foto" name="foto"
                                 onchange="previewImage()" required>
                             <img src="" alt="" class="img-preview img-fluid mb-3 mt-2 col-sm-8 d-none">
+                        </div>
+                        <div class="col-sm-3">
+                            <button type="button" class="btn btn-primary" id="btn-generate-image">
+                                <i class="bi bi-image"></i> Generate Image
+                            </button>
                         </div>
                     </div>
 
@@ -110,7 +115,7 @@
                 const prompt = $('#prompt').val();
                 const berita = $('#berita').val();
 
-                 // Tampilkan animasi loading
+                // Tampilkan animasi loading
                 Swal.fire({
                     title: 'Mohon Tunggu!',
                     html: 'AI Sedang Generate Postingan Berjudul ' + prompt + ' Untukmu...',
@@ -132,6 +137,51 @@
                         Swal.fire({
                             title: 'Success!',
                             text: 'Generate Berhasil, Cek di Form Berita',
+                            icon: 'success',
+                        })
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Something went wrong, Try again Later',
+                            icon: 'error',
+                        })
+                    }
+                });
+            })
+
+            $(document).on("click", "#btn-generate-image", function() {
+                const berita = $('#berita').val();
+
+                if (!berita) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Isi Berita Dulu Sebelum Generate Image',
+                        icon: 'error',
+                    })
+                    return;
+                }
+
+                // Tampilkan animasi loading
+                Swal.fire({
+                    title: 'Mohon Tunggu!',
+                    html: 'AI Sedang Generate Image untukmu...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    },
+                });
+
+                $.get("{{ route('admin.ai.generate.image') }}", {
+                    text: berita
+                }, function(res) {
+                    if (res.status === 'success') {
+                        // Tampilkan preview gambar
+                        $('.img-preview').removeClass('d-none');
+                        $('.img-preview').attr('src', res.data);
+
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Generate Image Berhasil, Cek di Form Berita',
                             icon: 'success',
                         })
                     } else {
