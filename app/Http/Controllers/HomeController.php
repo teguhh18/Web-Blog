@@ -25,8 +25,8 @@ class HomeController extends Controller
 
     public function beritaBaca($slug)
     {
-        $dataBerita = Berita::with(['kategori','user'])->orderBy('created_at', 'desc')->paginate(6);
         $berita = Berita::with(['kategori','user'])->where('slug', $slug)->firstOrFail();
+        $relateds = Berita::with(['kategori','user'])->where('kategori_id', $berita->kategori_id)->where('id', '!=', $berita->id)->paginate(6);
         $title = $berita->title;
         $dataKategori = Kategori::select('nama','slug')->get();
         $dataComment = Comment::with(['user'])->where('berita_id', $berita->id)->get();
@@ -45,7 +45,7 @@ class HomeController extends Controller
         return view('user.bacaBerita', compact(
             'title',
             'berita',
-            'dataBerita',
+            'relateds',
             'dataKategori',
             'countComment',
             'dataComment'

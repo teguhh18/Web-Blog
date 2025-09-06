@@ -61,7 +61,7 @@ class LoginController extends Controller
         ]);
 
         DB::beginTransaction();
-        try{
+        try {
             // enkripsi password
             $validatedData['password'] = Hash::make($validatedData['password']);
             $validatedData['level'] = "user";
@@ -78,13 +78,12 @@ class LoginController extends Controller
     public function userProfile($id)
     {
         $title = "Profile User";
-        $user = User::select('id','name','email','foto')->where('id', decrypt($id))->firstOrFail();
+        $user = User::select('id', 'name', 'email', 'foto')->where('id', decrypt($id))->firstOrFail();
         return  view('user.myProfile', compact(
             'title',
             'user'
         ));
     }
-
 
     public function updateProfile(Request $request, $id)
     {

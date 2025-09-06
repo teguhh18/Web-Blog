@@ -18,12 +18,14 @@ class AdminController extends Controller
         $kategori = Kategori::count();
         $user = User::count();
         $dataBerita = Berita::with('kategori')->orderBy('created_at', 'desc')->paginate(5);
+        $populer = Berita::with('kategori')->orderBy('views', 'desc')->paginate(5);
         return view('admin.home', compact(
             'title',
             'berita',
             'kategori',
             'user',
-            'dataBerita'
+            'dataBerita',
+            'populer'
         ));
     }
 
