@@ -1,8 +1,6 @@
 @extends('admin.layouts.admin')
 @section('main')
     <div class="container mt-4">
-        <a href="{{ route('admin.role-ai.create') }}" class="btn btn-primary mb-3"> <i class="bi bi-plus-circle-fill"></i>
-            Tambah</a>
         <div>
             @if (session('msg'))
                 <div class="alert alert-danger">

@@ -1,6 +1,5 @@
 <footer id="footer" class="footer">
 
-    {{-- --}}
 
     <div class="footer-legal">
       <div class="container">
@@ -20,11 +19,9 @@
 
           <div class="col-md-6">
             <div class="social-links mb-3 mb-lg-0 text-center text-md-end">
-              <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-              <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-              <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-              <a href="#" class="google-plus"><i class="bi bi-skype"></i></a>
-              <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+              <a href="https://www.instagram.com/teguhh_18/" class="instagram" target="_blank"><i class="bi bi-instagram"></i></a>
+              <a href="https://www.linkedin.com/in/teguhh18/" class="linkedin" target="_blank"><i class="bi bi-linkedin"></i></a>
+              <a href="https://github.com/teguhh18" class="github" target="_blank"><i class="bi bi-github"></i></a>
             </div>
 
           </div>

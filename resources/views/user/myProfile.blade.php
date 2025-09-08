@@ -44,7 +44,7 @@
                                         <img src="{{ asset('storage/' . $user->foto) }}" alt=""
                                             class="img-fluid img-thumbnail"  style=" width:200px">
                                     @else
-                                        <img src="" alt="" class="img-fluid img-thumbnail">
+                                        <img src="https://placehold.co/200x200?text=No+Image" alt="" class="img-fluid img-thumbnail">
                                     @endif
                                 </div>
                                 <div class="form-group col-md-6">
