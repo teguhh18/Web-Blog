@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Berita;
 use App\Models\Kategori;
 use App\Models\RoleAI;
+use Gemini;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -44,22 +45,32 @@ class BeritaController extends Controller
      */
     public function store(Request $request)
     {
+
+        // dd($request->all());
         $validatedData = $request->validate([
             'kategori_id' => 'required',
             'title' => 'required|max:255',
             'berita' => 'required',
-            'foto' => 'required|image',
+            'foto' => 'image',
+            'generated_image_base64' => 'required_without:foto',
         ]);
 
         if ($request->file('foto')) {
             $validatedData['foto'] = $request->file('foto')->store('foto-berita', 'public');
         }
 
+        if ($request->input('generated_image_base64')) {
+            $imageData = $request->input('generated_image_base64');
+            $imageName = 'foto-berita/' . uniqid() . '.png';
+            Storage::disk('public')->put($imageName, base64_decode($imageData));
+            $validatedData['foto'] = $imageName;
+        }
+
         $validatedData['user_id'] = auth()->user()->id;
 
         Berita::create($validatedData);
 
-        return redirect()->route('admin.berita.index')->with('success', 'Berita Berhasil Ditambah!!');
+        return redirect()->route('admin.berita.index')->with(['msg' => 'Berita Berhasil Ditambahkan', 'class' => 'success']);
     }
 
 
@@ -192,7 +203,10 @@ class BeritaController extends Controller
         ])->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" . env('GEMINI_API_KEY'), [
             "contents" => [
                 "parts" => [
-                    ["text" => 'Buatkan Prompt untuk generate image yang realistis berdasarkan teks berikut: ' . $request->text . 'jangan berikan respon selain prompt, hanya berikan prompt nya saja.']
+                    ["text" => 'Buatkan Prompt untuk generate image berdasarkan teks berikut: ' . $request->text . 'jangan berikan respon selain prompt, hanya berikan prompt nya saja. gunakan template ini untuk promptnya (A photorealistic [shot type] of [subject], [action or expression], set in
+[environment]. The scene is illuminated by [lighting description], creating
+a [mood] atmosphere. Captured with a [camera/lens details], emphasizing
+[key textures and details]. The image should be in a [aspect ratio] format.)']
                 ]
             ]
         ]);
@@ -202,6 +216,29 @@ class BeritaController extends Controller
         } else {
             return back()->with('error', 'Gagal membuat prompt gambar, coba lagi.');
         }
-       
+
+        try {
+
+            $client = Gemini::client(env('GEMINI_API_KEY'));
+            $result = $client->generativeModel('gemini-2.5-flash-image-preview')
+                ->generateContent($text);
+
+            $image = $result->candidates[0]->content->parts[1]->inlineData->data;
+            // dd($image);
+            if ($image) {
+                return response()->json([
+                    'status' => 'success',
+                    'image' => $image
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Tidak ada gambar yang dihasilkan oleh API.'
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Tangani jika ada error dari API
+            return response('Error: ' . $e->getMessage(), 500);
+        }
     }
 }

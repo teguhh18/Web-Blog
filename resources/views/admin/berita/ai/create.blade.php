@@ -79,6 +79,7 @@
                         <div class="col-sm-5">
                             <input class="form-control" type="file" id="foto" name="foto"
                                 onchange="previewImage()" required>
+                            <input type="hidden" name="generated_image_base64" id="generated_image_base64">
                             <img src="" alt="" class="img-preview img-fluid mb-3 mt-2 col-sm-8 d-none">
                         </div>
                         <div class="col-sm-3">
@@ -177,8 +178,12 @@
                     if (res.status === 'success') {
                         // Tampilkan preview gambar
                         $('.img-preview').removeClass('d-none');
-                        $('.img-preview').attr('src', res.data);
+                        $('.img-preview').attr('src', "data:image/png;base64," + res.image);
+                        $('#generated_image_base64').val(res.image);
 
+                        if ($('#generated_image_base64').val()) {
+                            $('#foto').prop('required', false);
+                        }
                         Swal.fire({
                             title: 'Success!',
                             text: 'Generate Image Berhasil, Cek di Form Berita',

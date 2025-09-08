@@ -6,10 +6,10 @@
         <a href="{{ route('admin.ai') }}" class="btn btn-info mb-3"> <i class="bi bi-lightning-fill"></i> Buat Dengan AI</a>
 
         <div>
-            @if (session()->has('success'))
-                <div class="alert alert-primary bg-primary alert-dismissible fade show text-white" role="alert">
+            @if (session()->has('msg'))
+                <div class="alert alert-{{ session('class') }} bg-{{ session('class') }} alert-dismissible fade show text-white" role="alert">
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    {{ session('success') }}
+                    {{ session('msg') }}
                 </div>
             @endif
         </div>
