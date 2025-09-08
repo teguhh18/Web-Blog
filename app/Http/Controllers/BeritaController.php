@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Berita;
 use App\Models\Kategori;
 use App\Models\RoleAI;
+use App\Models\TemplateImage;
 use Gemini;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
-
+use SebastianBergmann\Template\Template;
 
 class BeritaController extends Controller
 {
@@ -156,7 +157,8 @@ class BeritaController extends Controller
         $title = "Buat Berita Dengan AI";
         $roleAi = RoleAI::all();
         $dataKategori = Kategori::all();
-        return view('admin.berita.ai.create', compact('title', 'dataKategori', 'roleAi'));
+        $templates = TemplateImage::all();
+        return view('admin.berita.ai.create', compact('title', 'dataKategori', 'roleAi', 'templates'));
     }
 
     function berita_ai_generate(Request $request)
@@ -196,17 +198,17 @@ class BeritaController extends Controller
     {
         $request->validate([
             'text' => 'required|string',
+            'template_image' => 'required',
         ]);
+        $template_id = $request->template_image;
+        $template = TemplateImage::findOrFail($template_id);
 
         $prompt_image = Http::withHeaders([
             "Content-Type" => "application/json"
         ])->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" . env('GEMINI_API_KEY'), [
             "contents" => [
                 "parts" => [
-                    ["text" => 'Buatkan Prompt untuk generate image berdasarkan teks berikut: ' . $request->text . 'jangan berikan respon selain prompt, hanya berikan prompt nya saja. gunakan template ini untuk promptnya (A photorealistic [shot type] of [subject], [action or expression], set in
-[environment]. The scene is illuminated by [lighting description], creating
-a [mood] atmosphere. Captured with a [camera/lens details], emphasizing
-[key textures and details]. The image should be in a [aspect ratio] format.)']
+                    ["text" => 'Buatkan Prompt untuk generate image berdasarkan teks berikut: ' . $request->text . 'jangan berikan respon selain prompt, hanya berikan prompt nya saja. gunakan template ini untuk promptnya (' . $template->template . ')']
                 ]
             ]
         ]);

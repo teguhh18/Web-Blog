@@ -76,13 +76,25 @@
 
                     <div class="row mb-3">
                         <label for="foto" class="col-sm-2 col-form-label">Foto Berita</label>
-                        <div class="col-sm-5">
-                            <input class="form-control" type="file" id="foto" name="foto"
-                                onchange="previewImage()" required>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="file" id="foto" name="foto" required>
                             <input type="hidden" name="generated_image_base64" id="generated_image_base64">
-                            <img src="" alt="" class="img-preview img-fluid mb-3 mt-2 col-sm-8 d-none">
+                            <img src="" alt="Image Preview" class="img-preview img-fluid mt-3 col-sm-5 d-none">
                         </div>
-                        <div class="col-sm-3">
+                    </div>
+
+                    <div class="row mb-3 align-items-end">
+                        <label class="col-sm-2 col-form-label">Generate Image (AI)</label>
+                        <div class="col-sm-5">
+                            <label for="template_image">Template Image</label>
+                            <select name="template_image" id="template_image" class="form-select">
+                                <option value="">---Pilih Template Image---</option>
+                                @foreach ($templates as $key)
+                                    <option value="{{ $key->id }}">{{ $key->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-sm-5">
                             <button type="button" class="btn btn-primary" id="btn-generate-image">
                                 <i class="bi bi-image"></i> Generate Image
                             </button>
@@ -152,6 +164,7 @@
 
             $(document).on("click", "#btn-generate-image", function() {
                 const berita = $('#berita').val();
+                const template_image = $('#template_image').val();
 
                 if (!berita) {
                     Swal.fire({
@@ -173,7 +186,8 @@
                 });
 
                 $.get("{{ route('admin.ai.generate.image') }}", {
-                    text: berita
+                    text: berita,
+                    template_image: template_image
                 }, function(res) {
                     if (res.status === 'success') {
                         // Tampilkan preview gambar

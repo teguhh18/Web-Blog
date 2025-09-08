@@ -16,10 +16,21 @@
         </li><!-- End Profile Page Nav -->
         
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('admin/role-ai*') ? '' : 'collapsed' }}" href="{{ route('admin.role-ai.index') }}">
-                <i class="bi bi-lightning-fill"></i>
-                <span>Role AI</span>
+            <a class="nav-link {{ request()->is('admin/role-ai*') || request()->is('admin/template-image*') ? '' : 'collapsed' }}" data-bs-target="#ai-nav" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-robot"></i><span>AI</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
+            <ul id="ai-nav" class="nav-content collapse {{ request()->is('admin/role-ai*') || request()->is('admin/template-image*') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+            <li>
+                <a href="{{ route('admin.role-ai.index') }}" class="{{ request()->is('admin/role-ai*') ? 'active' : '' }}">
+                <i class="bi bi-circle"></i><span>Role AI</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.template-image.index') }}" class="{{ request()->is('admin/template-image*') ? 'active' : '' }}">
+                <i class="bi bi-circle"></i><span>Template Image</span>
+                </a>
+            </li>
+            </ul>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->is('admin/berita*') ? '' : 'collapsed' }}" href="{{ route('admin.berita.index') }}">
