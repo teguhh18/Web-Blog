@@ -64,10 +64,11 @@ Route::get('/bacaBerita/{slug}', [HomeController::class, 'beritaBaca'])->name('u
 Route::get('/kategori', [HomeController::class, 'listKategori'])->name('user.kategori');
 Route::get('/berita/kategori/{slug}', [HomeController::class, 'beritaByKategori'])->name('user.berita.kategori');
 
+Route::get('/search', [HomeController::class, 'search'])->name('user.berita.search');
+
 Route::post('/comment/{slug}', [CommentController::class, 'store'])->name('user.comment.store')->middleware('auth');
 
 Route::get('/userProfile/{id}', [LoginController::class, 'userProfile'])->name('user.profile')->middleware('auth');
-
 Route::put('/user/profile/update/{id}', [LoginController::class, 'updateProfile'])->name('user.profile.update')->middleware('auth');
 Route::put('/user/profile/password/{id}', [LoginController::class, 'updatePassword'])->name('user.password.update')->middleware('auth');
 

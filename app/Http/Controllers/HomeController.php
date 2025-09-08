@@ -111,4 +111,26 @@ class HomeController extends Controller
 
         ));
     }
+
+    public function search(Request $request)
+    {
+        $title = "Search";
+        $Berita = Berita::with(['kategori','user'])->orderBy('created_at', 'desc')->paginate(4);
+        $query = $request->input('search');
+        $dataBerita = Berita::with(['kategori','user'])
+            ->where('title', 'like', '%' . $query . '%')
+            ->orWhere('berita', 'like', '%' . $query . '%')
+            ->orderBy('created_at', 'desc')
+            ->paginate(6);
+
+        $dataKategori = Kategori::select('nama','slug')->get();
+
+        return view('user.search', compact(
+            'title',
+            'Berita',
+            'dataBerita',
+            'dataKategori',
+            'query'
+        ));
+    }
 }
