@@ -79,3 +79,6 @@ Route::post('/forgot-password', [PasswordResetController::class, 'sendOTP'])->na
 
 Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
+Route::get('test', function() {
+    return view('user.test');
+});
