@@ -18,10 +18,10 @@
                         <thead class="table-dark">
                             <tr>
                                 <th width="5%">No</th>
-                                <th width="20%">Nama User</th>
-                                <th width="25%">Post</th>
-                                <th width="30%">Comment</th>
-                                <th width="20%">Aksi</th>
+                                <th width="15%">Nama User</th>
+                                <th width="35%">Post</th>
+                                <th width="35%">Comment</th>
+                                <th width="10%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,15 +32,15 @@
                                         <strong>{{ ucwords($comment->user->name) }}</strong>
                                     </td>
                                     <td>
-                                        <span class="text-muted">{{ $comment->berita->title }}</span>
+                                        <span class="text-muted">{{ $comment->berita->title ?? 'Deleted Post' }}</span>
                                     </td>
                                     <td>
                                         <span class="text-muted">{{ $comment->comment }}</span>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                                            data-bs-target="#modalDelete{{ $comment->id }}">
-                                            <i class="bi bi-trash-fill"></i> Hapus
+                                        <button type="button" class="btn btn-sm btn-outline-danger btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#modalDelete{{ $comment->id }}" title="Hapus">
+                                            <i class="bi bi-trash-fill"></i>
                                         </button>
                                     </td>
                                 </tr>

@@ -2,8 +2,8 @@
 
 @section('main')
     <div class="container mt-4">
-        <a href="{{ route('admin.berita.create') }}" class="btn btn-primary mb-3"> <i class="bi bi-plus-circle-fill"></i> Tambah</a>
-        <a href="{{ route('admin.ai') }}" class="btn btn-info mb-3"> <i class="bi bi-lightning-fill"></i> Buat Dengan AI</a>
+        <a href="{{ route('admin.berita.create') }}" class="btn btn-primary mb-3 btn-sm"> <i class="bi bi-plus-circle-fill"></i> Tambah</a>
+        <a href="{{ route('admin.ai') }}" class="btn btn-info mb-3 btn-sm"> <i class="bi bi-lightning-fill"></i> Buat Dengan AI</a>
 
         <div>
             @if (session()->has('msg'))
@@ -38,10 +38,10 @@
                             <td>{{ $berita->user->name }}</td>
                             
                             <td>
-                                <a href="{{ route('admin.berita.edit', $berita->id) }}" class="btn btn-warning"> <i class="bi bi-pencil-fill"></i> Edit</a>
-                                <a href="{{ route('admin.berita.show', $berita->id) }}" class="btn btn-primary"> <i class="bi bi-eye-fill"></i> Lihat</a>
+                                <a href="{{ route('admin.berita.edit', $berita->id) }}" class="btn btn-warning btn-sm" title="Edit"> <i class="bi bi-pencil-fill"></i></a>
+                                <a href="{{ route('admin.berita.show', $berita->id) }}" class="btn btn-primary btn-sm" title="Lihat"> <i class="bi bi-eye-fill"></i></a>
                                 <button type="button" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $berita->id }}"
-                                    class="btn btn-danger"> <i class="bi bi-trash-fill"></i> Hapus</button>
+                                    class="btn btn-danger btn-sm" title="Hapus"> <i class="bi bi-trash-fill"></i></button>
                             </td>
                         </tr>
 

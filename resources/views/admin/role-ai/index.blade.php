@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 @section('main')
     <div class="container mt-4">
-        <a href="{{ route('admin.role-ai.create') }}" class="btn btn-primary mb-3"> <i class="bi bi-plus-circle-fill"></i>
+        <a href="{{ route('admin.role-ai.create') }}" class="btn btn-primary btn-sm mb-3"> <i class="bi bi-plus-circle-fill"></i>
             Tambah</a>
         <div>
             @if (session('msg'))
@@ -21,8 +21,8 @@
                             <tr>
                                 <th width="5%">No</th>
                                 <th width="20%">Nama</th>
-                                <th width="55%">Context</th>
-                                <th width="20%">Aksi</th>
+                                <th width="65%">Context</th>
+                                <th width="10%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,16 +36,14 @@
                                         <span class="text-muted">{{ $role->context }}</span>
                                     </td>
                                     <td>
-                                        <div class="btn-group" role="group">
                                             <a href="{{ route('admin.role-ai.edit', $role->id) }}"
-                                                class="btn btn-sm btn-outline-primary">
-                                                <i class="bi bi-pencil-fill"></i> Edit
+                                                class="btn btn-sm btn-outline-warning">
+                                                <i class="bi bi-pencil-fill" title="Edit"></i>
                                             </a>
                                             <button type="button" class="btn btn-sm btn-outline-danger"
                                                 data-bs-toggle="modal" data-bs-target="#modalDelete{{ $role->id }}">
-                                                <i class="bi bi-trash-fill"></i> Hapus
+                                                <i class="bi bi-trash-fill" title="Hapus"></i>
                                             </button>
-                                        </div>
                                     </td>
                                 </tr>
 

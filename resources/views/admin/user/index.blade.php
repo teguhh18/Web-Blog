@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 @section('main')
     <div class="container mt-4">
-        <a href="{{ route('admin.user.create') }}" class="btn btn-primary mb-3">
+        <a href="{{ route('admin.user.create') }}" class="btn btn-primary btn-sm mb-3">
             <i class="bi bi-plus-circle-fill"></i> Tambah
         </a>
         
