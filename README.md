@@ -21,7 +21,7 @@ Sebuah platform berita modern yang dibangun dengan Laravel, dilengkapi dengan fi
 - **Responsive Design** - Tampilan optimal di semua perangkat
 
 ### 🛠️ Fitur Admin (Backend)
-- **Dashboard Analytics** - Statistik berita, user, dan kategori
+- **Dashboard** - Statistik berita, user, dan kategori
 - **Manajemen Berita** - CRUD lengkap untuk artikel
 - **Manajemen Kategori** - Organisasi konten berdasarkan topik
 - **Manajemen User** - Kelola pengguna dan administrator
@@ -39,12 +39,13 @@ Sebuah platform berita modern yang dibangun dengan Laravel, dilengkapi dengan fi
 ### Backend
 - **Laravel 10.x** - PHP Framework
 - **MySQL** - Database
-- **Laravel Sanctum** - Authentication
+- **Middleware** - Request filtering
 - **Eloquent ORM** - Database interactions
 - **Blade Templating** - View engine
 
 ### Frontend
-- **Bootstrap 5** - CSS Framework
+- **Template Admin (Bootstrap)** - NiceAdmin
+- **Template User (Bootstrap)** - ZenBlog
 - **jQuery** - JavaScript library
 - **SweetAlert2** - Beautiful alerts
 - **Trix Editor** - Rich text editor
@@ -56,7 +57,6 @@ Sebuah platform berita modern yang dibangun dengan Laravel, dilengkapi dengan fi
 
 ### Development Tools
 - **Laravel Debugbar** - Development debugging
-- **Laravel Pint** - Code styling
 - **Faker** - Test data generation
 
 ## 📋 Persyaratan Sistem
@@ -132,42 +132,18 @@ Aplikasi akan tersedia di `http://localhost:8000`
 ## 🔐 Default Login
 
 ### Admin
-- **Email:** admin@example.com
-- **Password:** password
+- **Email:** admin@gmail.com
+- **Password:** 12345678
 
 ### User
-- **Email:** user@example.com
-- **Password:** password
+- **Email:** user@gmail.com
+- **Password:** user321
 
-## 📁 Struktur Project
-
-```
-Web-Blog/
-├── app/
-│   ├── Http/Controllers/     # Controllers
-│   ├── Models/              # Eloquent Models
-│   ├── Policies/            # Authorization Policies
-│   └── Providers/           # Service Providers
-├── database/
-│   ├── migrations/          # Database migrations
-│   ├── seeders/            # Database seeders
-│   └── factories/          # Model factories
-├── resources/
-│   ├── views/              # Blade templates
-│   │   ├── admin/          # Admin panel views
-│   │   └── user/           # Frontend views
-│   ├── css/                # Stylesheets
-│   └── js/                 # JavaScript files
-├── routes/
-│   ├── web.php             # Web routes
-│   └── api.php             # API routes
-└── public/                 # Public assets
-```
 
 ## 🎮 Cara Penggunaan
 
 ### Untuk Admin
-1. Login ke panel admin di `/login-user`
+1. Login ke panel admin di `/login`
 2. Gunakan dashboard untuk melihat statistik
 3. Kelola berita di menu "Berita" dengan fitur AI
 4. Atur kategori di menu "Kategori"
@@ -175,10 +151,11 @@ Web-Blog/
 
 ### Untuk User
 1. Registrasi akun baru di `/register`
-2. Browse berita di halaman utama
-3. Baca artikel lengkap dan berikan komentar
-4. Bagikan artikel ke media sosial
-5. Kelola profil di menu user
+2. Login user di `/login`
+3. Browse berita di halaman utama
+4. Baca artikel lengkap dan berikan komentar
+5. Bagikan artikel ke media sosial
+6. Kelola profil di menu user
 
 ### AI Content Generation
 1. Masuk ke menu "Berita AI" di admin panel
@@ -196,22 +173,6 @@ Web-Blog/
 - **File Upload Validation** - Validasi ketat untuk upload file
 - **SQL Injection Prevention** - Eloquent ORM protection
 
-## 🚀 Deployment
-
-### Server Requirements
-- PHP 8.1+
-- MySQL 5.7+
-- Apache/Nginx
-- Composer
-- SSL Certificate (Recommended)
-
-### Deployment Steps
-1. Upload files ke server
-2. Install dependencies: `composer install --optimize-autoloader --no-dev`
-3. Set permissions untuk storage dan bootstrap/cache
-4. Configure web server
-5. Setup SSL certificate
-6. Run migrations: `php artisan migrate --force`
 
 ## 🤝 Contributing
 
@@ -230,13 +191,13 @@ Project ini menggunakan [MIT License](https://opensource.org/licenses/MIT).
 - **Developer:** Teguhh18
 - **GitHub:** [@teguhh18](https://github.com/teguhh18)
 
-## 📞 Support
+<!-- ## 📞 Contact
 
 Jika Anda mengalami masalah atau memiliki pertanyaan:
 
 1. Buka issue di GitHub repository
 2. Dokumentasi Laravel: [laravel.com/docs](https://laravel.com/docs)
-3. Community Discord/Forum
+3. Community Discord/Forum -->
 
 ---
 
