@@ -55,7 +55,9 @@
                         @endforeach
                     @endif
                 </div>
-                {{ $dataBerita->links() }}
+                <div class="mt-6">
+                    {{ $dataBerita->links() }}
+                </div>
                 {{-- <!-- Load More Button -->
                 <div class="text-center mt-8" data-aos="fade-up" data-aos-delay="100">
                     <button class="btn btn-outline btn-primary btn-wide">

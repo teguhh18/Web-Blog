@@ -253,7 +253,7 @@
 
                         </div>
                         <div class="mt-4">
-                            <a href="" class="btn btn-outline btn-sm btn-block">Lihat Artikel Lainnya</a>
+                            <a href="{{ route('user.berita') }}" class="btn btn-outline btn-sm btn-block">Lihat Artikel Lainnya</a>
                         </div>
                     </div>
                 </div>
@@ -268,7 +268,7 @@
                     icon: '{{ session('icon') }}',
                     title: '{{ session('msg') }}',
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 2000
                 })
             </script>
         @endif

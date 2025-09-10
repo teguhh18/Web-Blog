@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -78,10 +79,12 @@ class LoginController extends Controller
     public function userProfile($id)
     {
         $title = "Profile User";
+        $dataKategori = Kategori::select('nama', 'slug')->get();
         $user = User::select('id', 'name', 'email', 'foto')->where('id', decrypt($id))->firstOrFail();
         return  view('user.myProfile', compact(
             'title',
-            'user'
+            'user',
+            'dataKategori'
         ));
     }
 

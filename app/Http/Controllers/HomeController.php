@@ -12,7 +12,7 @@ class HomeController extends Controller
     public function index()
     {
         $title = "Home";
-        $dataBerita = Berita::with(['kategori'])->orderBy('created_at', 'desc')->paginate(9);
+        $dataBerita = Berita::with(['kategori'])->orderBy('created_at', 'desc')->paginate(6);
         $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
         $dataKategori = Kategori::select('nama', 'slug', 'foto')->withCount('berita')->get();
         return view('user.home', compact(
@@ -29,7 +29,7 @@ class HomeController extends Controller
         $relateds = Berita::with(['kategori', 'user'])->where('kategori_id', $berita->kategori_id)->where('id', '!=', $berita->id)->paginate(6);
         $title = $berita->title;
         $dataKategori = Kategori::select('nama', 'slug')->get();
-        $dataComment = Comment::with(['user'])->where('berita_id', $berita->id)->get();
+        $dataComment = Comment::with(['user'])->where('berita_id', $berita->id)->orderBy('created_at', 'desc')->get();
         $countComment = $dataComment->count();
 
         $sessionKey = 'berita_' . $berita->id;
@@ -98,8 +98,10 @@ class HomeController extends Controller
     public function about()
     {
         $title = "About";
+        $dataKategori = Kategori::select('nama', 'slug')->get();
         return view('user.about', compact(
-            'title'
+            'title',
+            'dataKategori'
         ));
     }
 

@@ -41,14 +41,15 @@
                     <summary class="btn btn-ghost">Kategori</summary>
                     <ul class="p-2 bg-base-100 rounded-t-none">
                         @foreach ($dataKategori as $kategori)
-                            <li><a href="{{ route('user.berita.kategori', $kategori->slug) }}">{{ $kategori->nama }}</a>
+                            <li><a
+                                    href="{{ route('user.berita.kategori', $kategori->slug) }}">{{ $kategori->nama }}</a>
                             </li>
                         @endforeach
                     </ul>
                 </details>
             </li>
-            <li><a href="contact.html" class="btn btn-ghost">Kontak</a></li>
-            <li><a href="about.html" class="btn btn-ghost">Tentang</a></li>
+            {{-- <li><a href="{{ route('user.contact') }}" class="btn btn-ghost">Kontak</a></li> --}}
+            <li><a href="{{ route('user.about') }}" class="btn btn-ghost">Tentang</a></li>
         </ul>
     </div>
 
@@ -85,13 +86,17 @@
                         </li>
                     @endif
                     <li>
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button type="submit">Logout</button>
-                        </form>
+                        <a href="#"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
                     </li>
                 </ul>
             </div>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                @csrf
+                <button type="submit">Logout</button>
+            </form>
         @else
             <a href="{{ route('login') }}" class="btn btn-ghost">Login</a>
         @endauth
