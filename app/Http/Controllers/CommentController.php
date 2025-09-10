@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Berita;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
@@ -30,19 +31,24 @@ class CommentController extends Controller
      */
     public function store(Request $request, $slug)
     {
-        // dd($request);
-        $berita = Berita::where('slug', $slug)->firstOrFail(); 
+        // dd($request->all());
+        $berita = Berita::where('slug', $slug)->firstOrFail();
         // Validasi input
         $validatedData = $request->validate([
-            'comment' => 'required|max:255',
+            'comment' => 'required',
         ]);
-        
-        $validatedData['user_id'] = auth()->user()->id;
-        $validatedData['berita_id'] = $berita->id;
-        Comment::create($validatedData);
-
-        // Redirect dengan pesan sukses
-        return redirect()->route('user.berita.baca', $berita->slug)->with('success', 'Berhasil Mengirim Komentar!!');
+        DB::beginTransaction();
+        try {
+            $validatedData['user_id'] = auth()->user()->id;
+            $validatedData['berita_id'] = $berita->id;
+            Comment::create($validatedData);
+            DB::commit();
+            // Redirect dengan pesan sukses
+            return redirect()->back()->with(['msg' => 'Berhasil Mengirim Komentar!!', 'icon' => 'success']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['msg' => 'Gagal Mengirim Komentar: ' . $e->getMessage(), 'icon' => 'error']);
+        }
     }
 
     /**

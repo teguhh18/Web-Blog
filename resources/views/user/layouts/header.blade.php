@@ -19,48 +19,48 @@
             <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
 
             @if (Auth::check())
-            <div class="dropdown mx-2 d-inline-block">
-                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                Welcome, {{ Auth::user()->name }}
-                </a>
-
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-
-                @if(Auth::user()->level !== 'admin')
-                <li>
-                    <a href="{{ route('user.profile', encrypt(auth()->user()->id)) }}"
-                    class="dropdown-item">
-                    <i class="bi bi-person"></i> My Profile
+                <div class="dropdown mx-2 d-inline-block">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Welcome, {{ Auth::user()->name }}
                     </a>
-                </li>
-                @endif
-                <li>
-                    <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="dropdown-item">
-                        <i class="bi bi-box-arrow-in-left"></i> Logout
-                    </button>
-                    </form>
-                </li>
-                </ul>
-            </div>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+                        @if (Auth::user()->level !== 'admin')
+                            <li>
+                                <a href="{{ route('user.profile', encrypt(auth()->user()->id)) }}"
+                                    class="dropdown-item">
+                                    <i class="bi bi-person"></i> My Profile
+                                </a>
+                            </li>
+                        @endif
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">
+                                    <i class="bi bi-box-arrow-in-left"></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             @else
-            <a class="btn btn-dark mx-2" href="{{ route('login') }}">Login <i
-                class="bi bi-box-arrow-in-right"></i></a>
+                <a class="btn btn-dark mx-2" href="{{ route('login') }}">Login <i
+                        class="bi bi-box-arrow-in-right"></i></a>
             @endif
 
             <i class="bi bi-list mobile-nav-toggle"></i>
 
             <!-- ======= Search Form ======= -->
             <div class="search-form-wrap js-search-form-wrap">
-            <form action="{{ route('user.berita.search') }}" method="GET" class="search-form">
-                @csrf
-                <input type="text" placeholder="Search" name="search" class="form-control">
-                {{-- <button class="btn js-search-close"><span class="bi-x"></span></button> --}}
+                <form action="{{ route('user.berita.search') }}" method="GET" class="search-form">
+                    @csrf
+                    <input type="text" placeholder="Search" name="search" class="form-control">
+                    {{-- <button class="btn js-search-close"><span class="bi-x"></span></button> --}}
 
-                <button type="submit" class="btn"><i class="bi bi-search fs-5"></i></button>
-            </form>
+                    <button type="submit" class="btn"><i class="bi bi-search fs-5"></i></button>
+                </form>
             </div><!-- End Search Form -->
         </div>
     </div>

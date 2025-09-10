@@ -104,6 +104,37 @@
                             </div>
                         </div>
                     </article>
+                    <!-- Article 2 -->
+                    <article class="card bg-base-100 shadow-lg glass-card" data-aos="fade-up" data-aos-delay="100">
+                        <figure>
+                            <img src="https://placehold.co/400x200/f093fb/ffffff?text=Node.js+Express" alt="Node.js Express"
+                                class="w-full h-48 object-cover" />
+                        </figure>
+                        <div class="card-body">
+                            <div class="flex flex-wrap gap-1 mb-2">
+                                <div class="badge badge-warning badge-sm">node.js</div>
+                                <div class="badge badge-outline badge-sm">backend</div>
+                            </div>
+                            <h3 class="card-title text-lg">
+                                <a href="#" class="link link-hover">Membangun REST API dengan Node.js dan Express</a>
+                            </h3>
+                            <p class="text-sm text-base-content/70 mb-3">
+                                Tutorial lengkap membuat REST API menggunakan Node.js, Express, dan MongoDB untuk aplikasi
+                                web modern.
+                            </p>
+                            <div class="flex justify-between items-center text-xs text-base-content/60">
+                                <div class="flex items-center gap-1">
+                                    <div class="avatar placeholder">
+                                        <div class="bg-warning text-warning-content rounded-full w-6">
+                                            <span class="text-xs">BD</span>
+                                        </div>
+                                    </div>
+                                    <span>Bob Dev</span>
+                                </div>
+                                <time>5 Sep 2025</time>
+                            </div>
+                        </div>
+                    </article>
                 </div>
 
                 <!-- Load More Button -->
@@ -120,30 +151,6 @@
 
             <!-- Sidebar (1/3 width) -->
             <aside class="space-y-6">
-                <!-- Search Widget -->
-                <div class="card bg-base-100 shadow-lg glass-card" data-aos="fade-left">
-                    <div class="card-body">
-                        <h3 class="card-title text-lg mb-4">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                            Pencarian
-                        </h3>
-                        <div class="form-control">
-                            <div class="input-group">
-                                <input type="text" placeholder="Cari artikel..." class="input input-bordered flex-1" />
-                                <button class="btn btn-square btn-primary">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Popular Posts Widget -->
                 <div class="card bg-base-100 shadow-lg glass-card" data-aos="fade-left" data-aos-delay="100">
                     <div class="card-body">

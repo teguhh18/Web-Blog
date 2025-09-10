@@ -14,7 +14,7 @@ class HomeController extends Controller
         $title = "Home";
         $dataBerita = Berita::with(['kategori'])->orderBy('created_at', 'desc')->paginate(9);
         $beritaPopuler = Berita::with(['kategori','user'])->orderBy('views', 'desc')->paginate(4);
-        $dataKategori = Kategori::select('nama','slug')->get();
+        $dataKategori = Kategori::select('nama','slug','foto')->withCount('berita')->get();
         return view('user.home', compact(
             'title',
             'dataBerita',
