@@ -15,7 +15,7 @@
                     <a>Kategori</a>
                     <ul class="p-2">
                         @foreach ($dataKategori as $kategori)
-                            <li><a href="{{ route('user.berita.kategori', $kategori->slug) }}">⚡
+                            <li><a href="{{ route('user.berita.kategori', $kategori->slug) }}">
                                     {{ $kategori->name }}</a></li>
                         @endforeach
                     </ul>
@@ -24,7 +24,7 @@
                 <li><a href="{{ route('user.contact') }}">Kontak</a></li>
             </ul>
         </div>
-        <a class="btn btn-ghost text-xl font-bold">
+        <a class="btn btn-ghost text-xl font-bold" href="{{ route('user.home') }}">
             <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -70,30 +70,30 @@
                 <li><a onclick="setTheme('light')">☀️ Light</a></li>
                 <li><a onclick="setTheme('dark')">🌙 Dark</a></li>
             </ul>
-            @auth
-                <div class="dropdown dropdown-end">
-                    <div tabindex="0" role="button" class="btn btn-ghost">
-                        {{ Auth::user()->name }}
-                    </div>
-                    <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                        @if (Auth::user()->level !== 'admin')
-                            <li>
-                                <a href="{{ route('user.profile', encrypt(auth()->user()->id)) }}">
-                                    My Profile
-                                </a>
-                            </li>
-                        @endif
-                        <li>
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button type="submit">Logout</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            @else
-                <a href="{{ route('login') }}" class="btn btn-ghost">Login</a>
-            @endauth
         </div>
+        @auth
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost">
+                    {{ Auth::user()->name }}
+                </div>
+                <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                    @if (Auth::user()->level !== 'admin')
+                        <li>
+                            <a href="{{ route('user.profile', encrypt(auth()->user()->id)) }}">
+                                My Profile
+                            </a>
+                        </li>
+                    @endif
+                    <li>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        @else
+            <a href="{{ route('login') }}" class="btn btn-ghost">Login</a>
+        @endauth
     </div>
 </div>

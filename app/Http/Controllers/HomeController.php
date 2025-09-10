@@ -13,8 +13,8 @@ class HomeController extends Controller
     {
         $title = "Home";
         $dataBerita = Berita::with(['kategori'])->orderBy('created_at', 'desc')->paginate(9);
-        $beritaPopuler = Berita::with(['kategori','user'])->orderBy('views', 'desc')->paginate(4);
-        $dataKategori = Kategori::select('nama','slug','foto')->withCount('berita')->get();
+        $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
+        $dataKategori = Kategori::select('nama', 'slug', 'foto')->withCount('berita')->get();
         return view('user.home', compact(
             'title',
             'dataBerita',
@@ -25,10 +25,10 @@ class HomeController extends Controller
 
     public function beritaBaca($slug)
     {
-        $berita = Berita::with(['kategori','user'])->where('slug', $slug)->firstOrFail();
-        $relateds = Berita::with(['kategori','user'])->where('kategori_id', $berita->kategori_id)->where('id', '!=', $berita->id)->paginate(6);
+        $berita = Berita::with(['kategori', 'user'])->where('slug', $slug)->firstOrFail();
+        $relateds = Berita::with(['kategori', 'user'])->where('kategori_id', $berita->kategori_id)->where('id', '!=', $berita->id)->paginate(6);
         $title = $berita->title;
-        $dataKategori = Kategori::select('nama','slug')->get();
+        $dataKategori = Kategori::select('nama', 'slug')->get();
         $dataComment = Comment::with(['user'])->where('berita_id', $berita->id)->get();
         $countComment = $dataComment->count();
 
@@ -56,20 +56,21 @@ class HomeController extends Controller
     {
         $title = "Berita";
         $dataBerita = Berita::with(['kategori'])->orderBy('created_at', 'desc')->paginate(6);
-        $dataKategori = Kategori::select('nama','slug')->get();
-        // dd($dataBerita);
+        $dataKategori = Kategori::select('nama', 'slug','foto')->withCount('berita')->get();
+        $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
         return view('user.berita', compact(
             'title',
             'dataBerita',
-            'dataKategori'
+            'dataKategori',
+            'beritaPopuler'
         ));
     }
 
     public function listKategori()
     {
         $title = "Kategori";
-        $dataBerita = Berita::with(['kategori','user'])->orderBy('created_at', 'desc')->paginate(4);
-        $dataKategori = Kategori::select('nama','slug','foto')->paginate(6);
+        $dataBerita = Berita::with(['kategori', 'user'])->orderBy('created_at', 'desc')->paginate(4);
+        $dataKategori = Kategori::select('nama', 'slug', 'foto')->paginate(6);
 
         return view('user.list_kategori', compact(
             'title',
@@ -80,17 +81,16 @@ class HomeController extends Controller
 
     public function beritaByKategori($slug)
     {
-        $kategori = Kategori::select('id','nama')->where('slug', $slug)->firstOrFail();
+        $kategori = Kategori::select('id', 'nama')->where('slug', $slug)->firstOrFail();
         $title = $kategori->nama;
-        $dataBerita = Berita::with(['kategori','user'])->where('kategori_id', $kategori->id)->orderBy('created_at', 'desc')->paginate(4);
-
-        $Berita = Berita::with(['kategori','user'])->orderBy('created_at', 'desc')->paginate(4);
-        $dataKategori = Kategori::select('nama','slug')->get();
+        $dataBerita = Berita::with(['kategori', 'user'])->where('kategori_id', $kategori->id)->orderBy('created_at', 'desc')->paginate(6);
+        $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
+        $dataKategori = Kategori::select('nama', 'slug','foto')->withCount('berita')->get();
         return view('user.kategori', compact(
             'title',
             'dataBerita',
             'dataKategori',
-            'Berita'
+            'beritaPopuler'
 
         ));
     }
@@ -115,15 +115,15 @@ class HomeController extends Controller
     public function search(Request $request)
     {
         $title = "Search";
-        $Berita = Berita::with(['kategori','user'])->orderBy('created_at', 'desc')->paginate(4);
+        $Berita = Berita::with(['kategori', 'user'])->orderBy('created_at', 'desc')->paginate(4);
         $query = $request->input('search');
-        $dataBerita = Berita::with(['kategori','user'])
+        $dataBerita = Berita::with(['kategori', 'user'])
             ->where('title', 'like', '%' . $query . '%')
             ->orWhere('berita', 'like', '%' . $query . '%')
             ->orderBy('created_at', 'desc')
             ->paginate(6);
 
-        $dataKategori = Kategori::select('nama','slug')->get();
+        $dataKategori = Kategori::select('nama', 'slug')->get();
 
         return view('user.search', compact(
             'title',

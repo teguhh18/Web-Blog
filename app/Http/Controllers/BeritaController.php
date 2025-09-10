@@ -169,29 +169,34 @@ class BeritaController extends Controller
         ]);
 
         $role = RoleAI::select('context')->where('id', $validatedData['role_ai'])->first();
-        $response = Http::withHeaders([
-            "Content-Type" => "application/json"
-        ])->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" . env('GEMINI_API_KEY'), [
-            "contents" => [
-                "parts" => [
-                    ["text" => $role->context . ' ' . $validatedData['prompt']]
-                ]
-            ]
-        ]);
+        $client = Gemini::client(env('GEMINI_API_KEY'));
+        try {
+            $response = $client->generativeModel('gemini-2.0-flash')
+                ->generateContent($role->context . ' ' . $validatedData['prompt']);
 
-        if ($response->successful()) {
-            $text = $response->json()['candidates'][0]['content']['parts'][0]['text'];
+            $text = $response->candidates[0]->content->parts[0]->text;
             return response()->json([
                 'status' => 'success',
                 'data' => $text
             ]);
-        } else {
-            $text = "Something went wrong, Try again Later";
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'data' => $text
+                'data' => 'Gagal, ada error: ' . $e->getMessage()
             ]);
         }
+    }
+
+    private function generate_prompt_image(Request $request)
+    {
+        $template_id = $request->template_image;
+        $template = TemplateImage::findOrFail($template_id);
+
+        $client = Gemini::client(env('GEMINI_API_KEY'));
+        $prompt_image = $client->generativeModel('gemini-2.0-flash')
+            ->generateContent('Buatkan Prompt untuk generate image berdasarkan teks berikut: ' . $request->text . 'jangan berikan respon selain prompt, hanya berikan prompt nya saja. gunakan template ini untuk promptnya (' . $template->template . ')');
+
+        return $prompt_image->candidates[0]->content->parts[0]->text;
     }
 
     public function generate_image(Request $request)
@@ -200,33 +205,14 @@ class BeritaController extends Controller
             'text' => 'required|string',
             'template_image' => 'required',
         ]);
-        $template_id = $request->template_image;
-        $template = TemplateImage::findOrFail($template_id);
-
-        $prompt_image = Http::withHeaders([
-            "Content-Type" => "application/json"
-        ])->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" . env('GEMINI_API_KEY'), [
-            "contents" => [
-                "parts" => [
-                    ["text" => 'Buatkan Prompt untuk generate image berdasarkan teks berikut: ' . $request->text . 'jangan berikan respon selain prompt, hanya berikan prompt nya saja. gunakan template ini untuk promptnya (' . $template->template . ')']
-                ]
-            ]
-        ]);
-
-        if ($prompt_image->successful()) {
-            $text = $prompt_image->json()['candidates'][0]['content']['parts'][0]['text'];
-        } else {
-            return back()->with('error', 'Gagal membuat prompt gambar, coba lagi.');
-        }
 
         try {
-
             $client = Gemini::client(env('GEMINI_API_KEY'));
+
+            $text = $this->generate_prompt_image($request);
             $result = $client->generativeModel('gemini-2.5-flash-image-preview')
                 ->generateContent($text);
-
             $image = $result->candidates[0]->content->parts[1]->inlineData->data;
-            // dd($image);
             if ($image) {
                 return response()->json([
                     'status' => 'success',
@@ -235,12 +221,15 @@ class BeritaController extends Controller
             } else {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Tidak ada gambar yang dihasilkan oleh API.'
+                    'message' => 'Gagal membuat gambar. Ada masalah. Coba lagi nanti.'
                 ]);
             }
         } catch (\Exception $e) {
-            // Tangani jika ada error dari API
-            return response('Error: ' . $e->getMessage(), 500);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Kuota API Anda mungkin telah habis atau ada masalah lain. Coba lagi nanti.',
+                'error' => $e->getMessage()
+            ]);
         }
     }
 }

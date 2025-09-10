@@ -87,7 +87,7 @@
                         <label class="col-sm-2 col-form-label">Generate Image (AI)</label>
                         <div class="col-sm-5">
                             <label for="template_image">Template Image</label>
-                            <select name="template_image" id="template_image" class="form-select">
+                            <select name="template_image" id="template_image" class="form-select" required>
                                 <option value="">---Pilih Template Image---</option>
                                 @foreach ($templates as $key)
                                     <option value="{{ $key->id }}">{{ $key->name }}</option>
@@ -155,7 +155,7 @@
                     } else {
                         Swal.fire({
                             title: 'Error!',
-                            text: 'Something went wrong, Try again Later',
+                            text: res.data,
                             icon: 'error',
                         })
                     }
@@ -165,6 +165,15 @@
             $(document).on("click", "#btn-generate-image", function() {
                 const berita = $('#berita').val();
                 const template_image = $('#template_image').val();
+
+                if (template_image === "") {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Pilih Template Image Dulu',
+                        icon: 'error',
+                    })
+                    return;
+                }
 
                 if (!berita) {
                     Swal.fire({
@@ -206,11 +215,42 @@
                     } else {
                         Swal.fire({
                             title: 'Error!',
-                            text: 'Something went wrong, Try again Later',
+                            text: res.message + ' ' + res.error,
                             icon: 'error',
                         })
                     }
                 });
+
+                // $.ajax({
+                //     url: "{{ route('admin.ai.generate.image') }}",
+                //     type: 'GET',
+                //     data: {
+                //         text: berita,
+                //         template_image: template_image
+                //     },
+                //     success: function(res) {
+                //         // Tampilkan preview gambar
+                //         $('.img-preview').removeClass('d-none');
+                //         $('.img-preview').attr('src', "data:image/png;base64," + res.image);
+                //         $('#generated_image_base64').val(res.image);
+
+                //         if ($('#generated_image_base64').val()) {
+                //             $('#foto').prop('required', false);
+                //         }
+                //         Swal.fire({
+                //             title: 'Success!',
+                //             text: 'Generate Image Berhasil, Cek di Form Berita',
+                //             icon: 'success',
+                //         })
+                //     },
+                //     error: function(res) {
+                //         Swal.fire({
+                //             title: 'Error!',
+                //             text: res.message + ' ' + res.error,
+                //             icon: 'error',
+                //         })
+                //     }
+                // });
             })
         })
     </script>
