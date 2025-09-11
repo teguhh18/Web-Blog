@@ -39,6 +39,12 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link {{ request()->is('admin/tools*') ? '' : 'collapsed' }}" href="{{ route('admin.tools.index') }}">
+                <i class="bi bi-tools"></i>
+                <span>Tools</span>
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {{ request()->is('admin/comment*') ? '' : 'collapsed' }}" href="{{ route('admin.comment.index') }}">
                 <i class="bi bi-chat-dots"></i>
                 <span>Data Comment</span>

@@ -56,7 +56,7 @@ class HomeController extends Controller
     {
         $title = "Berita";
         $dataBerita = Berita::with(['kategori'])->orderBy('created_at', 'desc')->paginate(6);
-        $dataKategori = Kategori::select('nama', 'slug','foto')->withCount('berita')->get();
+        $dataKategori = Kategori::select('nama', 'slug', 'foto')->withCount('berita')->get();
         $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
         return view('user.blog.berita', compact(
             'title',
@@ -85,7 +85,7 @@ class HomeController extends Controller
         $title = $kategori->nama;
         $dataBerita = Berita::with(['kategori', 'user'])->where('kategori_id', $kategori->id)->orderBy('created_at', 'desc')->paginate(6);
         $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
-        $dataKategori = Kategori::select('nama', 'slug','foto')->withCount('berita')->get();
+        $dataKategori = Kategori::select('nama', 'slug', 'foto')->withCount('berita')->get();
         return view('user.blog.kategori', compact(
             'title',
             'dataBerita',
@@ -119,17 +119,19 @@ class HomeController extends Controller
         $title = "Search";
         $Berita = Berita::with(['kategori', 'user'])->orderBy('created_at', 'desc')->paginate(4);
         $query = $request->input('search');
+        $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
         $dataBerita = Berita::with(['kategori', 'user'])
             ->where('title', 'like', '%' . $query . '%')
             ->orWhere('berita', 'like', '%' . $query . '%')
             ->orderBy('created_at', 'desc')
             ->paginate(6);
 
-        $dataKategori = Kategori::select('nama', 'slug')->get();
+        $dataKategori = Kategori::select('nama', 'slug', 'foto')->get();
 
-        return view('user.search', compact(
+        return view('user.blog.search', compact(
             'title',
             'Berita',
+            'beritaPopuler',
             'dataBerita',
             'dataKategori',
             'query'

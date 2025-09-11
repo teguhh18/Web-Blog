@@ -20,6 +20,13 @@
                         @endforeach
                     </ul>
                 </li>
+                <li>
+                    <a>Tools</a>
+                    <ul class="p-2">
+                        <li><a href="#">Tools 1</a></li>
+                        <li><a href="#">Tools 2</a></li>
+                    </ul>
+                </li>
                 <li><a href="{{ route('user.about') }}">Tentang</a></li>
                 <li><a href="{{ route('user.contact') }}">Kontak</a></li>
             </ul>
@@ -48,6 +55,15 @@
                     </ul>
                 </details>
             </li>
+            <li>
+                <details>
+                    <summary class="btn btn-ghost">Tools</summary>
+                    <ul class="p-2 bg-base-100 rounded-t-none">
+                        <li><a href="#">Tools 1</a></li>
+                        <li><a href="#">Tools 2</a></li> 
+                    </ul>
+                </details>
+            </li>
             {{-- <li><a href="{{ route('user.contact') }}" class="btn btn-ghost">Kontak</a></li> --}}
             <li><a href="{{ route('user.about') }}" class="btn btn-ghost">Tentang</a></li>
         </ul>
@@ -56,7 +72,8 @@
     <div class="navbar-end">
         <form action="{{ route('user.berita.search') }}" method="GET">
             @csrf
-            <input type="text" name="search" placeholder="Search" class="input input-bordered input-sm w-24 md:w-auto" />
+            <input type="text" name="search" placeholder="Search"
+                class="input input-bordered input-sm w-24 md:w-auto" />
             <button class="btn btn-ghost btn-circle">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
