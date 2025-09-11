@@ -86,7 +86,7 @@
                 </figure>
 
                 <!-- Article Content -->
-                <div class="article-content prose max-w-none" data-aos="fade-up" data-aos-delay="300">
+                <div class="article-content prose max-w-none dark" data-aos="fade-up" data-aos-delay="300">
                     {!! $berita->berita !!}
                 </div>
 
@@ -214,11 +214,6 @@
                                 </div>
                             </div>
                         @endforeach
-
-                        <!-- More Comments Button -->
-                        <div class="text-center">
-                            <button class="btn btn-outline">Muat Komentar Lainnya (18)</button>
-                        </div>
                     </div>
                 </div>
             </article>

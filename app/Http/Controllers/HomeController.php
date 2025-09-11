@@ -15,7 +15,7 @@ class HomeController extends Controller
         $dataBerita = Berita::with(['kategori'])->orderBy('created_at', 'desc')->paginate(6);
         $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
         $dataKategori = Kategori::select('nama', 'slug', 'foto')->withCount('berita')->get();
-        return view('user.home', compact(
+        return view('user.blog.home', compact(
             'title',
             'dataBerita',
             'dataKategori',
@@ -41,8 +41,8 @@ class HomeController extends Controller
             // Add the key to session
             session()->put($sessionKey, 1);
         }
-        // dd($dataComment); 
-        return view('user.bacaBerita', compact(
+        // dd($dataComment);
+        return view('user.blog.bacaBerita', compact(
             'title',
             'berita',
             'relateds',
@@ -58,7 +58,7 @@ class HomeController extends Controller
         $dataBerita = Berita::with(['kategori'])->orderBy('created_at', 'desc')->paginate(6);
         $dataKategori = Kategori::select('nama', 'slug','foto')->withCount('berita')->get();
         $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
-        return view('user.berita', compact(
+        return view('user.blog.berita', compact(
             'title',
             'dataBerita',
             'dataKategori',
@@ -86,7 +86,7 @@ class HomeController extends Controller
         $dataBerita = Berita::with(['kategori', 'user'])->where('kategori_id', $kategori->id)->orderBy('created_at', 'desc')->paginate(6);
         $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
         $dataKategori = Kategori::select('nama', 'slug','foto')->withCount('berita')->get();
-        return view('user.kategori', compact(
+        return view('user.blog.kategori', compact(
             'title',
             'dataBerita',
             'dataKategori',
@@ -99,7 +99,7 @@ class HomeController extends Controller
     {
         $title = "About";
         $dataKategori = Kategori::select('nama', 'slug')->get();
-        return view('user.about', compact(
+        return view('user.blog.about', compact(
             'title',
             'dataKategori'
         ));
@@ -108,7 +108,7 @@ class HomeController extends Controller
     public function contact()
     {
         $title = "Contact";
-        return view('user.contact', compact(
+        return view('user.blog.contact', compact(
             'title'
 
         ));

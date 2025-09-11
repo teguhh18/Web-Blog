@@ -81,7 +81,7 @@ class LoginController extends Controller
         $title = "Profile User";
         $dataKategori = Kategori::select('nama', 'slug')->get();
         $user = User::select('id', 'name', 'email', 'foto')->where('id', decrypt($id))->firstOrFail();
-        return  view('user.myProfile', compact(
+        return  view('user.blog.myProfile', compact(
             'title',
             'user',
             'dataKategori'

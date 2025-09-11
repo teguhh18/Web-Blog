@@ -32,8 +32,6 @@
 
 <body class="bg-base-100 flex flex-col min-h-screen">
 
-    {{-- URUTAN YANG BENAR DIMULAI DARI SINI --}}
-
     @include('user.new-layouts.header')
 
     <main class="flex-grow">
@@ -102,6 +100,7 @@
         function setTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
+            document.getElementById('current-theme').innerText = theme === 'light' ? '☀️' : '🌙';
         }
 
         // Load saved theme
