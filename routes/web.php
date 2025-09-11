@@ -9,7 +9,8 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\TemplateImageController;
-use App\Http\Controllers\Admin\ToolsController;
+use App\Http\Controllers\Admin\ToolsController as AdminToolsController;
+use App\Http\Controllers\ToolsController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\RoleAIController;
@@ -44,7 +45,7 @@ Route::get('/admin/home', [AdminController::class, 'index'])->middleware('auth_a
 Route::resource('/admin/kategori', KategoriController::class)->middleware('auth_admin')->names('admin.kategori');
 Route::resource('/admin/role-ai', RoleAIController::class)->middleware('auth_admin')->names('admin.role-ai');
 Route::resource('/admin/template-image', TemplateImageController::class)->middleware('auth_admin')->names('admin.template-image');
-Route::resource('/admin/tools', ToolsController::class)->middleware('auth_admin')->names('admin.tools');
+Route::resource('/admin/tools', AdminToolsController::class)->middleware('auth_admin')->names('admin.tools');
 
 Route::get('/admin/berita/ai', [BeritaController::class, 'berita_ai'])->middleware('auth_admin')->name('admin.ai');
 Route::get('/admin/berita/ai/generate', [BeritaController::class, 'berita_ai_generate'])->middleware('auth_admin')->name('admin.ai.generate');
@@ -72,6 +73,7 @@ Route::post('/comment/{slug}', [CommentController::class, 'store'])->name('user.
 Route::get('/userProfile/{id}', [LoginController::class, 'userProfile'])->name('user.profile')->middleware('auth');
 Route::put('/user/profile/update/{id}', [LoginController::class, 'updateProfile'])->name('user.profile.update')->middleware('auth');
 Route::put('/user/profile/password/{id}', [LoginController::class, 'updatePassword'])->name('user.password.update')->middleware('auth');
+Route::resource('/user/tools', ToolsController::class)->middleware('auth')->names('user.tools');
 
 
 // RESET PASSWORD
@@ -80,9 +82,8 @@ Route::post('/forgot-password', [PasswordResetController::class, 'sendOTP'])->na
 
 Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
-Route::get('test', function() {
-    $dataKategori = \App\Models\Kategori::all();
-    return view('user.tools.qrcode-generator', compact('dataKategori'));
-});
+
+// TOOLS
+Route::get('user/qrcode-generator', [ToolsController::class, 'qrcodeGenerator'])->name('user.tools.qrcode')->middleware('auth');
     
 

@@ -23,8 +23,9 @@
                 <li>
                     <a>Tools</a>
                     <ul class="p-2">
-                        <li><a href="#">Tools 1</a></li>
-                        <li><a href="#">Tools 2</a></li>
+                        @foreach ($tools as $tool)
+                            <li><a href="{{ route('user.tools.show', $tool->slug) }}">{{ $tool->name }}</a></li>
+                        @endforeach
                     </ul>
                 </li>
                 <li><a href="{{ route('user.about') }}">Tentang</a></li>
@@ -59,8 +60,9 @@
                 <details>
                     <summary class="btn btn-ghost">Tools</summary>
                     <ul class="p-2 bg-base-100 rounded-t-none">
-                        <li><a href="#">Tools 1</a></li>
-                        <li><a href="#">Tools 2</a></li> 
+                        @foreach ($tools as $tool)
+                            <li><a href="{{ route('user.tools.show', $tool->slug) }}">{{ $tool->name }}</a></li>
+                        @endforeach
                     </ul>
                 </details>
             </li>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Berita;
 use App\Models\Comment;
 use App\Models\Kategori;
+use App\Models\Tools;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -15,11 +16,13 @@ class HomeController extends Controller
         $dataBerita = Berita::with(['kategori'])->orderBy('created_at', 'desc')->paginate(6);
         $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
         $dataKategori = Kategori::select('nama', 'slug', 'foto')->withCount('berita')->get();
+        $tools = Tools::where('status', 'active')->get();
         return view('user.blog.home', compact(
             'title',
             'dataBerita',
             'dataKategori',
-            'beritaPopuler'
+            'beritaPopuler',
+            'tools'
         ));
     }
 
@@ -31,7 +34,7 @@ class HomeController extends Controller
         $dataKategori = Kategori::select('nama', 'slug')->get();
         $dataComment = Comment::with(['user'])->where('berita_id', $berita->id)->orderBy('created_at', 'desc')->get();
         $countComment = $dataComment->count();
-
+        $tools = Tools::where('status', 'active')->get();
         $sessionKey = 'berita_' . $berita->id;
 
         // Check if the session does not have the key
@@ -48,7 +51,8 @@ class HomeController extends Controller
             'relateds',
             'dataKategori',
             'countComment',
-            'dataComment'
+            'dataComment',
+            'tools'
         ));
     }
 
@@ -58,11 +62,14 @@ class HomeController extends Controller
         $dataBerita = Berita::with(['kategori'])->orderBy('created_at', 'desc')->paginate(6);
         $dataKategori = Kategori::select('nama', 'slug', 'foto')->withCount('berita')->get();
         $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
+        $tools = Tools::where('status', 'active')->get();
+
         return view('user.blog.berita', compact(
             'title',
             'dataBerita',
             'dataKategori',
-            'beritaPopuler'
+            'beritaPopuler',
+            'tools'
         ));
     }
 
@@ -71,11 +78,12 @@ class HomeController extends Controller
         $title = "Kategori";
         $dataBerita = Berita::with(['kategori', 'user'])->orderBy('created_at', 'desc')->paginate(4);
         $dataKategori = Kategori::select('nama', 'slug', 'foto')->paginate(6);
-
+        $tools = Tools::where('status', 'active')->get();
         return view('user.list_kategori', compact(
             'title',
             'dataKategori',
-            'dataBerita'
+            'dataBerita',
+            'tools'
         ));
     }
 
@@ -86,11 +94,14 @@ class HomeController extends Controller
         $dataBerita = Berita::with(['kategori', 'user'])->where('kategori_id', $kategori->id)->orderBy('created_at', 'desc')->paginate(6);
         $beritaPopuler = Berita::with(['kategori', 'user'])->orderBy('views', 'desc')->paginate(4);
         $dataKategori = Kategori::select('nama', 'slug', 'foto')->withCount('berita')->get();
+        $tools = Tools::where('status', 'active')->get();
+
         return view('user.blog.kategori', compact(
             'title',
             'dataBerita',
             'dataKategori',
-            'beritaPopuler'
+            'beritaPopuler',
+            'tools'
 
         ));
     }
@@ -99,18 +110,23 @@ class HomeController extends Controller
     {
         $title = "About";
         $dataKategori = Kategori::select('nama', 'slug')->get();
+        $tools = Tools::where('status', 'active')->get();
+
         return view('user.blog.about', compact(
             'title',
-            'dataKategori'
+            'dataKategori',
+            'tools'
         ));
     }
 
     public function contact()
     {
         $title = "Contact";
-        return view('user.blog.contact', compact(
-            'title'
+        $tools = Tools::where('status', 'active')->get();
 
+        return view('user.blog.contact', compact(
+            'title',
+            'tools'
         ));
     }
 
@@ -127,6 +143,7 @@ class HomeController extends Controller
             ->paginate(6);
 
         $dataKategori = Kategori::select('nama', 'slug', 'foto')->get();
+        $tools = Tools::where('status', 'active')->get();
 
         return view('user.blog.search', compact(
             'title',
@@ -134,7 +151,8 @@ class HomeController extends Controller
             'beritaPopuler',
             'dataBerita',
             'dataKategori',
-            'query'
+            'query',
+            'tools'
         ));
     }
 }
