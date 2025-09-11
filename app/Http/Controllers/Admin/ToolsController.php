@@ -47,7 +47,7 @@ class ToolsController extends Controller
             return redirect()->route('admin.tools.index')->with('msg', 'Tools berhasil ditambahkan.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('admin.tools.create')->with('msg', 'Terjadi kesalahan saat menambahkan Tools.' . $e->getMessage());
+            return redirect()->back()->with('msg', 'Terjadi kesalahan saat menambahkan Tools.' . $e->getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ class ToolsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Tools $tools, $id)
+    public function edit($id)
     {
         $title = "Edit Tools";
         $tool = Tools::findOrFail($id);
@@ -72,9 +72,25 @@ class ToolsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tools $tools)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required',
+            'status' => 'required',
+        ]);
+        $validatedData['slug'] = Str::slug($request->name);
+        // dd($validatedData);
+        DB::beginTransaction();
+        try {
+            $tool = Tools::findOrFail($id);
+            $tool->update($validatedData);
+            DB::commit();
+            return redirect()->route('admin.tools.index')->with('msg', 'Tools berhasil diupdate.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('msg', 'Terjadi kesalahan saat mengupdate Tools.' . $e->getMessage());
+        }
     }
 
     /**

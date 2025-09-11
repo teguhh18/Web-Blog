@@ -56,16 +56,19 @@
                     </ul>
                 </details>
             </li>
-            <li>
-                <details>
-                    <summary class="btn btn-ghost">Tools</summary>
-                    <ul class="p-2 bg-base-100 rounded-t-none">
-                        @foreach ($tools as $tool)
-                            <li><a href="{{ route('user.tools.show', $tool->slug) }}">{{ $tool->name }}</a></li>
-                        @endforeach
-                    </ul>
-                </details>
-            </li>
+            @if ($tools->isNotEmpty())
+                <li>
+                    <details>
+                        <summary class="btn btn-ghost">Tools</summary>
+                        <ul class="p-2 bg-base-100 rounded-t-none">
+                            @foreach ($tools as $tool)
+                                <li><a href="{{ route('user.tools.show', $tool->slug) }}">{{ $tool->name }}</a></li>
+                            @endforeach
+                        </ul>
+                    </details>
+                </li>
+            @endif
+
             {{-- <li><a href="{{ route('user.contact') }}" class="btn btn-ghost">Kontak</a></li> --}}
             <li><a href="{{ route('user.about') }}" class="btn btn-ghost">Tentang</a></li>
         </ul>

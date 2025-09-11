@@ -13,6 +13,7 @@ class Tools extends Model
         'name',
         'slug',
         'description',
+        'status',
     ];
 
     protected $table = 'tools';
