@@ -85,5 +85,6 @@ Route::post('reset-password', [PasswordResetController::class, 'resetPassword'])
 
 // TOOLS
 Route::get('user/qrcode-generator', [ToolsController::class, 'qrcodeGenerator'])->name('user.tools.qrcode')->middleware('auth');
-    
+Route::post('user/image-to-pdf', [ToolsController::class, 'imageToPdf'])->name('user.tools.imageToPdf')->middleware('auth');
+
 

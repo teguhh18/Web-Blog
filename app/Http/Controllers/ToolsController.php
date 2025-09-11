@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Kategori;
 use App\Models\Tools;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Spatie\LaravelPdf\Facades\Pdf;
 
 class ToolsController extends Controller
 {
@@ -90,17 +92,52 @@ class ToolsController extends Controller
         $qrcode_string = (string) $qrcode_object;
         $qrcode = preg_replace('/<\?xml.*?\?>\n/', '', $qrcode_string, 1);
         // dd($qrcode);
-        try{
+        try {
             return response()->json([
                 'status' => 'success',
                 'data' => $qrcode
             ]);
-
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Terjadi kesalahan saat membuat QR Code.' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function imageToPdf(Request $request)
+    {
+        // 1. Validasi request
+        $request->validate([
+            'images' => 'required|array',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Maksimal 2MB per gambar
+        ]);
+
+        $imagePaths = [];
+        $tempFiles = [];
+
+        // 2. Simpan gambar yang diunggah ke storage sementara
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                // Simpan file ke storage/app/public/temp
+                $path = $image->store('public/temp');
+                $imagePaths[] = Storage::url($path); // Dapatkan URL publik
+                $tempFiles[] = $path; // Simpan path untuk dihapus nanti
+            }
+        }
+
+        // 3. Render view Blade yang berisi gambar, lalu konversi ke PDF
+        $pdf = Pdf::view('user.tools.pdf.template', ['imagePaths' => $imagePaths])
+            ->format('a4')
+            ->margins(0, 0, 0, 0); // Atur margin menjadi 0
+
+        // dd($pdf);
+        // 4. Hapus file sementara setelah PDF dibuat
+        foreach ($tempFiles as $file) {
+            Storage::delete($file);
+        }
+
+        // 5. Kirim PDF ke browser untuk diunduh
+        return $pdf->download('gambar-konversi.pdf');
     }
 }
