@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>MyBlog - {{ $title }}</title>
     <meta content="" name="description">
@@ -74,7 +75,8 @@
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
                         data-bs-toggle="dropdown">
                         @if (auth()->user()->foto)
-                            <img src="{{ asset('storage/' . auth()->user()->foto) }}" alt="Profile" class="rounded-circle">
+                            <img src="{{ asset('storage/' . auth()->user()->foto) }}" alt="Profile"
+                                class="rounded-circle">
                         @else
                             <img src="{{ asset('admin/img/profile-img.jpg') }}" alt="Profile" class="rounded-circle">
                         @endif

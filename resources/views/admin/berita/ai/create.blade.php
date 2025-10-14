@@ -87,7 +87,7 @@
                         <label class="col-sm-2 col-form-label">Generate Image (AI)</label>
                         <div class="col-sm-5">
                             <label for="template_image">Template Image</label>
-                            <select name="template_image" id="template_image" class="form-select" required>
+                            <select name="template_image" id="template_image" class="form-select">
                                 <option value="">---Pilih Template Image---</option>
                                 @foreach ($templates as $key)
                                     <option value="{{ $key->id }}">{{ $key->name }}</option>
@@ -194,63 +194,48 @@
                     },
                 });
 
-                $.get("{{ route('admin.ai.generate.image') }}", {
-                    text: berita,
-                    template_image: template_image
-                }, function(res) {
-                    if (res.status === 'success') {
-                        // Tampilkan preview gambar
-                        $('.img-preview').removeClass('d-none');
-                        $('.img-preview').attr('src', "data:image/png;base64," + res.image);
-                        $('#generated_image_base64').val(res.image);
+                $.ajax({
+                    url: "{{ route('admin.ai.generate.image') }}",
+                    type: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        text: berita,
+                        template_image: template_image
+                    },
+                    cache: false,
+                    success: function(res) {
+                        if (res.status === 'success') {
+                            // Tampilkan preview gambar
+                            $('.img-preview').removeClass('d-none');
+                            $('.img-preview').attr('src', "data:image/png;base64," + res.image);
+                            $('#generated_image_base64').val(res.image);
 
-                        if ($('#generated_image_base64').val()) {
-                            $('#foto').prop('required', false);
+                            if ($('#generated_image_base64').val()) {
+                                $('#foto').prop('required', false);
+                            }
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Generate Image Berhasil, Cek di Form Berita',
+                                icon: 'success',
+                            })
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: res.message + ' ' + res.error,
+                                icon: 'error',
+                            })
                         }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
                         Swal.fire({
-                            title: 'Success!',
-                            text: 'Generate Image Berhasil, Cek di Form Berita',
-                            icon: 'success',
-                        })
-                    } else {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: res.message + ' ' + res.error,
+                            title: 'AJAX Error!',
+                            text: 'Terjadi kesalahan saat mengirim permintaan. Silakan coba lagi. ' +
+                                errorThrown,
                             icon: 'error',
                         })
                     }
                 });
 
-                // $.ajax({
-                //     url: "{{ route('admin.ai.generate.image') }}",
-                //     type: 'GET',
-                //     data: {
-                //         text: berita,
-                //         template_image: template_image
-                //     },
-                //     success: function(res) {
-                //         // Tampilkan preview gambar
-                //         $('.img-preview').removeClass('d-none');
-                //         $('.img-preview').attr('src', "data:image/png;base64," + res.image);
-                //         $('#generated_image_base64').val(res.image);
-
-                //         if ($('#generated_image_base64').val()) {
-                //             $('#foto').prop('required', false);
-                //         }
-                //         Swal.fire({
-                //             title: 'Success!',
-                //             text: 'Generate Image Berhasil, Cek di Form Berita',
-                //             icon: 'success',
-                //         })
-                //     },
-                //     error: function(res) {
-                //         Swal.fire({
-                //             title: 'Error!',
-                //             text: res.message + ' ' + res.error,
-                //             icon: 'error',
-                //         })
-                //     }
-                // });
             })
         })
     </script>
