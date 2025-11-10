@@ -1,7 +1,8 @@
 @extends('admin.layouts.admin')
 @section('main')
     <div class="container mt-4">
-        <a href="{{ route('admin.kategori.create') }}" class="btn btn-primary btn-sm mb-3"> <i class="bi bi-plus-circle-fill"></i>
+        <a href="{{ route('admin.kategori.create') }}" class="btn btn-primary btn-sm mb-3"> <i
+                class="bi bi-plus-circle-fill"></i>
             Tambah</a>
         <div>
             @if (session()->has('success'))
@@ -32,16 +33,23 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $kategori->nama }}</td>
                                     <td>
-                                        <img src="{{ asset('storage/' . $kategori->foto) }}" alt=""
-                                            class="img-fluid img-thumbnail" style="max-height: 100px;">
+                                        @if ($kategori->foto == null)
+                                            <img src="https://placehold.co/600x400?text=No+Image" alt="Foto Berita"
+                                                width="100">
+                                        @else
+                                            <img class="img-fluid img-thumbnail" style="max-height: 100px;"
+                                                src="{{ route('storage.show', ['path' => $kategori->foto]) }}"
+                                                alt="{{ $kategori->nama }}">
+                                        @endif
                                     </td>
 
                                     <td>
-                                        <a href="{{ route('admin.kategori.edit', $kategori->id) }}" class="btn btn-warning btn-sm" title="Edit">
+                                        <a href="{{ route('admin.kategori.edit', $kategori->id) }}"
+                                            class="btn btn-warning btn-sm" title="Edit">
                                             <i class="bi bi-pencil-fill"></i></a>
                                         <button type="button" data-bs-toggle="modal"
-                                            data-bs-target="#modalDelete{{ $kategori->id }}" class="btn btn-danger btn-sm" title="Hapus"> <i
-                                                class="bi bi-trash-fill"></i></button>
+                                            data-bs-target="#modalDelete{{ $kategori->id }}" class="btn btn-danger btn-sm"
+                                            title="Hapus"> <i class="bi bi-trash-fill"></i></button>
                                     </td>
                                 </tr>
 

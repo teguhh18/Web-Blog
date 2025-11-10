@@ -24,8 +24,8 @@
                         @foreach ($dataBerita as $berita)
                             <article class="card bg-base-100 shadow-lg glass-card" data-aos="fade-up" data-aos-delay="100">
                                 <figure>
-                                    <img src="{{ asset('storage/' . $berita->foto) }}" alt="{{ $berita->title }}"
-                                        class="w-full h-48 object-cover" />
+                                    <img src="{{ route('storage.show', ['path' => $berita->foto]) }}"
+                                        alt="{{ $berita->title }}" class="w-full h-48 object-cover" />
                                 </figure>
                                 <div class="card-body">
                                     {{-- <div class="flex flex-wrap gap-1 mb-2">
@@ -43,7 +43,8 @@
                                         <div class="flex items-center gap-1">
                                             <div class="avatar placeholder">
                                                 <div class="bg-primary text-primary-content rounded-full w-6">
-                                                    <img src="{{ asset('storage/' . $berita->user->foto) }}" alt="">
+                                                    <img src="{{ route('storage.show', ['path' => $berita->user->foto]) }}"
+                                                        alt="">
                                                 </div>
                                             </div>
                                             <span>{{ $berita->user->name }}</span>
@@ -85,7 +86,8 @@
                                 <article
                                     class="flex items-start space-x-3 p-3 rounded-lg bg-info/5 hover:bg-info/10 transition-colors">
                                     <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                                        <img src="{{ asset('storage/' . $populer->foto) }}" alt="{{ $populer->title }}">
+                                        <img src="{{ route('storage.show', ['path' => $populer->foto]) }}"
+                                            alt="{{ $populer->title }}">
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <h4 class="font-semibold text-sm leading-tight">
@@ -130,8 +132,18 @@
                                 <a href="{{ route('user.berita.kategori', $kategori->slug) }}"
                                     class="flex justify-between items-center p-2 rounded-lg hover:bg-primary/10 transition-colors">
                                     <span class="flex items-center gap-3">
-                                        <img src="{{ asset('storage/' . $kategori->foto) }}" alt="{{ $kategori->nama }}"
-                                            class="w-6 h-6 rounded object-cover">
+                                        @if ($kategori->foto)
+                                            <img src="{{ route('storage.show', ['path' => $kategori->foto]) }}"
+                                                alt="{{ $kategori->nama }}" class="w-6 h-6 rounded object-cover">
+                                        @else
+                                            <div class="w-6 h-6 bg-base-200 rounded flex items-center justify-center">
+                                                <svg class="w-4 h-4 text-base-content/50" fill="currentColor"
+                                                    viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4V5h12v10zM8.5 7a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm5.25 1.75l-3.5 4.5-2-2.5L6 13h8.75a.25.25 0 00.25-.25v-3.5a.25.25 0 00-.25-.25z" />
+                                                </svg>
+                                            </div>
+                                        @endif
                                         <span>{{ $kategori->nama }}</span>
                                     </span>
                                     <div class="badge badge-primary badge-sm">{{ $kategori->berita_count }}</div>

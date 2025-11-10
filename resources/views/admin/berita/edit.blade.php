@@ -48,8 +48,8 @@
 
                             {{-- untuk preview gambar yang akan diupload atau diubah --}}
                             @if ($berita->foto)
-                                <img src="{{ asset('storage/' . $berita->foto) }}" alt=""
-                                    class="img-preview img-fluid mb-3 mt-2 col-sm-8 d-block">
+                                <img class="img-preview img-fluid mb-3 mt-2 col-sm-8 d-block"
+                                    src="{{ route('storage.show', ['path' => $berita->foto]) }}" alt="{{ $berita->title }}">
                             @else
                                 <img src="" alt="" class="img-preview img-fluid mb-3 col-sm-8">
                             @endif

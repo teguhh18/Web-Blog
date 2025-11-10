@@ -43,7 +43,7 @@ class KategoriController extends Controller
         // Validasi input
         $validatedData = $request->validate([
             'nama' => 'required|max:255',
-            'foto' => 'required|image',
+            'foto' => 'nullable|image|max:1024',
         ]);
 
         // Menyimpan file foto
@@ -90,7 +90,7 @@ class KategoriController extends Controller
     // Validasi input
     $validatedData = $request->validate([
         'nama' => 'required|max:255',
-        'foto' => 'image|file|2048',
+        'foto' => 'nullable|image|max:1024',
     ]);
 
     // Menyimpan file foto jika ada

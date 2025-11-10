@@ -38,8 +38,8 @@
                                 <td>{{ $users->level }}</td>
                                 <td class="text-center align-middle">
                                     @if ($users->foto)
-                                        <img src="{{ asset('storage/' . $users->foto) }}" 
-                                             alt="User Photo" 
+                                        <img src="{{ route('storage.show', ['path' => $users->foto]) }}" 
+                                             alt="{{ $users->name }}" 
                                              class="img-thumbnail rounded-circle" 
                                              style="width: 60px; height: 60px; object-fit: cover;">
                                     @else

@@ -7,7 +7,7 @@ use App\Models\Tools;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Spatie\LaravelPdf\Facades\Pdf;
+use Mpdf\Mpdf;
 
 class ToolsController extends Controller
 {
@@ -110,34 +110,62 @@ class ToolsController extends Controller
         // 1. Validasi request
         $request->validate([
             'images' => 'required|array',
-            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Maksimal 2MB per gambar
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240', // Maksimal 10MB per gambar
         ]);
 
-        $imagePaths = [];
-        $tempFiles = [];
+        // dd($request->file('images'));
 
-        // 2. Simpan gambar yang diunggah ke storage sementara
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                // Simpan file ke storage/app/public/temp
-                $path = $image->store('public/temp');
-                $imagePaths[] = Storage::url($path); // Dapatkan URL publik
-                $tempFiles[] = $path; // Simpan path untuk dihapus nanti
+        try {
+            // 2. Inisialisasi mPDF
+            $mpdf = new Mpdf([
+                'mode' => 'utf-8',
+                'format' => 'A4',
+                'margin_left' => 10,
+                'margin_right' => 10,
+                'margin_top' => 10,
+                'margin_bottom' => 10,
+            ]);
+
+            // 3. Loop setiap gambar yang diupload
+            foreach ($request->file('images') as $index => $image) {
+                // Konversi gambar ke base64
+                $imageData = base64_encode(file_get_contents($image->getRealPath()));
+                $imageMime = $image->getMimeType();
+
+                // Buat HTML untuk menampilkan gambar (full page, centered)
+                $html = '
+                    <div style="text-align: center; display: flex; align-items: center; justify-content: center; height: 100%; page-break-after: always;">
+                        <img src="data:' . $imageMime . ';base64,' . $imageData . '" 
+                             style="max-width: 100%; max-height: 100%; height: auto; object-fit: contain;" />
+                    </div>
+                ';
+
+                // Tambahkan halaman baru jika bukan gambar pertama
+                if ($index > 0) {
+                    $mpdf->AddPage();
+                }
+
+                $mpdf->WriteHTML($html);
             }
+
+            dd($mpdf);
+
+            // 4. Simpan PDF ke folder storage/app/public/pdfs
+            $fileName = 'converted_' . time() . '.pdf';
+            $filePath = 'pdfs/' . $fileName;
+
+            // Pastikan folder pdfs ada
+            if (!file_exists(storage_path('app/public/pdfs'))) {
+                mkdir(storage_path('app/public/pdfs'), 0755, true);
+            }
+
+            // Simpan file PDF
+            $mpdf->Output(storage_path('app/public/' . $filePath), 'F');
+
+            // 5. Return dengan session untuk menampilkan link download
+            return back()->with('pdf_path', 'storage/' . $filePath);
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Gagal mengkonversi gambar: ' . $e->getMessage()]);
         }
-
-        // 3. Render view Blade yang berisi gambar, lalu konversi ke PDF
-        $pdf = Pdf::view('user.tools.pdf.template', ['imagePaths' => $imagePaths])
-            ->format('a4')
-            ->margins(0, 0, 0, 0); // Atur margin menjadi 0
-
-        // dd($pdf);
-        // 4. Hapus file sementara setelah PDF dibuat
-        foreach ($tempFiles as $file) {
-            Storage::delete($file);
-        }
-
-        // 5. Kirim PDF ke browser untuk diunduh
-        return $pdf->download('gambar-konversi.pdf');
     }
 }

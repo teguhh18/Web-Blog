@@ -10,6 +10,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\TemplateImageController;
 use App\Http\Controllers\Admin\ToolsController as AdminToolsController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\ToolsController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PasswordResetController;
@@ -84,5 +85,8 @@ Route::get('reset-password/{token}', [PasswordResetController::class, 'showReset
 Route::post('reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
 
 // TOOLS
-Route::get('user/qrcode-generator', [ToolsController::class, 'qrcodeGenerator'])->name('user.tools.qrcode')->middleware('auth');
 Route::post('user/image-to-pdf', [ToolsController::class, 'imageToPdf'])->name('user.tools.imageToPdf')->middleware('auth');
+Route::get('user/qrcode-generator', [ToolsController::class, 'qrcodeGenerator'])->name('user.tools.qrcode')->middleware('auth');
+
+// AKSES FILE DI STORAGE TANPA STORAGE LINK
+Route::get('/storage-file/{path}', [FileController::class, 'show'])->where('path', '.*')->name('storage.show');
