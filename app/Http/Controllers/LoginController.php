@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kategori;
+use App\Models\Tools;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -81,10 +82,12 @@ class LoginController extends Controller
         $title = "Profile User";
         $dataKategori = Kategori::select('nama', 'slug')->get();
         $user = User::select('id', 'name', 'email', 'foto')->where('id', decrypt($id))->firstOrFail();
+        $tools = Tools::where('status', 'active')->get();
         return  view('user.blog.myProfile', compact(
             'title',
             'user',
-            'dataKategori'
+            'dataKategori',
+            'tools'
         ));
     }
 

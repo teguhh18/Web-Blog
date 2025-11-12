@@ -15,7 +15,7 @@
                         <div class="flex items-center gap-2">
                             <div class="avatar">
                                 <div class="w-10 rounded-full">
-                                    <img src="{{ asset('storage/' . $berita->user->foto) }}"
+                                    <img src="{{ route('storage.show', ['path' => $berita->user->foto]) }}"
                                         alt="{{ $berita->user->name }}" />
                                 </div>
                             </div>
@@ -82,7 +82,7 @@
                 <!-- Featured Image -->
                 <figure class="mb-8 flex justify-center" data-aos="fade-up" data-aos-delay="200">
                     <img class="w-full h-auto max-h-[500px] object-contain rounded-lg"
-                        src="{{ asset('storage/' . $berita->foto) }}" alt="{{ $berita->title }}" />
+                        src="{{ route('storage.show', ['path' => $berita->foto]) }}" alt="{{ $berita->title }}" />
                 </figure>
 
                 <!-- Article Content -->
@@ -90,168 +90,12 @@
                     {!! $berita->berita !!}
                 </div>
 
-                <!-- Article Tags -->
-                {{-- <div class="flex flex-wrap gap-2 mt-8 pt-6 border-t border-base-300" data-aos="fade-up">
-                    <span class="text-sm font-medium text-base-content/60">Tags:</span>
-                    <a href="#" class="badge badge-outline hover:badge-primary transition-colors">Bootstrap</a>
-                    <a href="#" class="badge badge-outline hover:badge-primary transition-colors">CSS</a>
-                    <a href="#" class="badge badge-outline hover:badge-primary transition-colors">Responsive
-                        Design</a>
-                    <a href="#" class="badge badge-outline hover:badge-primary transition-colors">Web
-                        Development</a>
-                    <a href="#" class="badge badge-outline hover:badge-primary transition-colors">Frontend</a>
-                    <a href="#" class="badge badge-outline hover:badge-primary transition-colors">Tutorial</a>
-                </div> --}}
-
-                <!-- Author Bio -->
-                {{-- <div class="card bg-base-200 mt-8" data-aos="fade-up">
-                    <div class="card-body">
-                        <div class="flex items-start gap-4">
-                            <div class="avatar">
-                                <div class="w-16 rounded-full">
-                                    <img src="https://placehold.co/100x100/667eea/ffffff?text=JD" alt="John Doe" />
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <h3 class="text-lg font-bold mb-2">John Doe</h3>
-                                <p class="text-sm text-base-content/70 mb-3">
-                                    Senior Web Developer dengan pengalaman 8+ tahun dalam pengembangan frontend.
-                                    Spesialis dalam React, Vue.js, dan CSS frameworks modern. Passionate tentang
-                                    web performance dan user experience.
-                                </p>
-                                <div class="flex gap-2">
-                                    <a href="#" class="btn btn-sm btn-outline">
-                                        🌐 Website
-                                    </a>
-                                    <a href="#" class="btn btn-sm btn-outline">
-                                        🐦 Twitter
-                                    </a>
-                                    <a href="#" class="btn btn-sm btn-outline">
-                                        💻 GitHub
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-
-                <!-- Navigation to Related Posts -->
-                {{-- <div class="grid md:grid-cols-2 gap-4 mt-8" data-aos="fade-up">
-                    <div class="card bg-base-100 shadow-lg">
-                        <div class="card-body">
-                            <div class="text-sm text-base-content/60 mb-2">← Previous Post</div>
-                            <h3 class="card-title text-base">
-                                <a href="#" class="link link-hover">Mengenal CSS Grid Layout untuk Pemula</a>
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="card bg-base-100 shadow-lg">
-                        <div class="card-body text-right">
-                            <div class="text-sm text-base-content/60 mb-2">Next Post →</div>
-                            <h3 class="card-title text-base justify-end">
-                                <a href="#" class="link link-hover">JavaScript ES6+ untuk Pengembang Modern</a>
-                            </h3>
-                        </div>
-                    </div>
-                </div> --}}
-
-                <!-- Comments Section -->
-                <div class="mt-12" data-aos="fade-up">
-                    <h3 class="text-2xl font-bold mb-6">Komentar ({{ $countComment }})</h3>
-
-                    <!-- Comment Form -->
-                    <div class="card bg-base-200 mb-8">
-                        <div class="card-body">
-                            <h4 class="card-title text-lg mb-4">Tinggalkan Komentar</h4>
-                            <form class="space-y-4" action="{{ route('user.comment.store', $berita->slug) }}"
-                                method="POST">
-                                @csrf
-                                <div class="form-control">
-                                    <label class="label">
-                                        <span class="label-text">Komentar</span>
-                                    </label>
-                                    <textarea class="textarea textarea-bordered h-24" name="comment" placeholder="Tulis komentar Anda..." required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                    </svg>
-                                    Kirim Komentar
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Comments List -->
-                    <div class="space-y-6">
-
-                        @foreach ($dataComment as $comment)
-                            <div class="flex gap-4">
-                                <div class="avatar">
-                                    <div class="w-10 h-10 rounded-full">
-                                        @if ($comment->user->foto)
-                                            <img src="{{ asset('storage/' . $comment->user->foto) }}"
-                                                alt="{{ $comment->user->name }}" />
-                                        @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->name) }}&background=random"
-                                                alt="{{ $comment->user->name }}" />
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="bg-base-200 rounded-lg p-4">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <span class="font-medium">{{ $comment->user->name }}</span>
-                                            <span
-                                                class="text-sm text-base-content/60">{{ $comment->created_at->diffForHumans() }}</span>
-                                        </div>
-                                        <p class="text-sm">
-                                            {{ $comment->comment }}
-                                        </p>
-                                    </div>
-
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
+                @include('user.blog.partials.comment')
             </article>
 
             <!-- Sidebar (1/4 width) -->
             <aside class="space-y-6">
-                <!-- Related Posts -->
-                <div class="card bg-base-100 shadow-lg glass-card" data-aos="fade-left" data-aos-delay="100">
-                    <div class="card-body">
-                        <h3 class="card-title text-lg mb-4">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            Artikel Terkait
-                        </h3>
-                        <div class="space-y-4">
-                            @foreach ($relateds as $related)
-                                <article class="flex gap-3">
-                                    <img src="{{ asset('storage/' . $related->foto) }}" alt="React"
-                                        class="w-20 h-15 object-cover rounded flex-shrink-0" />
-                                    <div class="flex-1">
-                                        <h4 class="font-medium text-sm leading-tight mb-1">
-                                            <a href="{{ route('user.berita.baca', $related->slug) }}"
-                                                class="link link-hover">{{ $related->title }}</a>
-                                        </h4>
-                                        <div class="text-xs text-base-content/60">
-                                            {{ $related->created_at->format('d M Y') }}</div>
-                                    </div>
-                                </article>
-                            @endforeach
-
-                        </div>
-                        <div class="mt-4">
-                            <a href="{{ route('user.berita') }}" class="btn btn-outline btn-sm btn-block">Lihat Artikel Lainnya</a>
-                        </div>
-                    </div>
-                </div>
+                @include('user.blog.partials.related')
             </aside>
         </div>
     </div>
@@ -263,7 +107,7 @@
                     icon: '{{ session('icon') }}',
                     title: '{{ session('msg') }}',
                     showConfirmButton: false,
-                    timer: 2000
+                    timer: 1000
                 })
             </script>
         @endif
