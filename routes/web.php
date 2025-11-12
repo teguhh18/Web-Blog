@@ -2,19 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\TemplateImageController;
 use App\Http\Controllers\Admin\ToolsController as AdminToolsController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ToolsController;
-use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\PasswordResetController;
-use App\Http\Controllers\RoleAIController;
+use App\Http\Controllers\Admin\RoleAIController;
 
 /*
 |--------------------------------------------------------------------------

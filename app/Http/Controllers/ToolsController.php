@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Kategori;
 use App\Models\Tools;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Mpdf\Mpdf;
 
@@ -147,8 +146,6 @@ class ToolsController extends Controller
 
                 $mpdf->WriteHTML($html);
             }
-
-            dd($mpdf);
 
             // 4. Simpan PDF ke folder storage/app/public/pdfs
             $fileName = 'converted_' . time() . '.pdf';

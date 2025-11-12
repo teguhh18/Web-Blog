@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\RoleAI;
-use App\Http\Requests\StoreRoleAIRequest;
-use App\Http\Requests\UpdateRoleAIRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

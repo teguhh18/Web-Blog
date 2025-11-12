@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use App\Models\Kategori;
 use App\Models\User;
@@ -32,7 +33,7 @@ class AdminController extends Controller
     public function adminProfile($id)
     {
         $title = "Profile";
-        $user = User::select('id','name','email','foto')->Where('id', decrypt($id))->firstOrFail();
+        $user = User::select('id', 'name', 'email', 'foto')->Where('id', decrypt($id))->firstOrFail();
         return view('admin.profile', compact(
             'title',
             'user',
@@ -40,13 +41,14 @@ class AdminController extends Controller
     }
 
     public function updateProfile(Request $request, $id)
-    {$user = User::Where('id', decrypt($id))->firstOrFail();
+    {
+        $user = User::Where('id', decrypt($id))->firstOrFail();
         $rules = [
             'name' => 'required|max:255',
         ];
 
-       
-        if($request->email != $user->email) {
+
+        if ($request->email != $user->email) {
             $rules['email'] = ['required', 'email', Rule::unique('users')->ignore($user->id)];
         }
 
@@ -57,11 +59,10 @@ class AdminController extends Controller
                 Storage::delete('public/' . $user->foto);
             }
             $validatedData['foto'] = $request->file('foto')->store('foto-users', 'public');
-            
         }
 
         User::where('id', $user->id)
-                ->update($validatedData);
+            ->update($validatedData);
         return redirect()->route('admin.profile', $id)->with('success', 'Data Berhasil Diubah!!');
     }
 
@@ -84,9 +85,10 @@ class AdminController extends Controller
         return redirect()->route('admin.profile', $id)->with('success', 'Password Berhasil Diubah');
     }
 
-    public function modalProfilePicture() {
+    public function modalProfilePicture()
+    {
         $user_id = auth()->user()->id;
-        $dataUser = User::select('id','foto')->Where('id', $user_id)->firstOrFail();
+        $dataUser = User::select('id', 'foto')->Where('id', $user_id)->firstOrFail();
 
         $view = view('admin.profile-picture', [
             'user' => $dataUser,
@@ -94,14 +96,15 @@ class AdminController extends Controller
 
         return response()->json(['html' => $view]);
     }
-    
-    public function ProfilePictureUpload(Request $request) {
+
+    public function ProfilePictureUpload(Request $request)
+    {
         $request->validate([
             'foto' => 'required|image|max:2048',
         ]);
 
         $user_id = auth()->user()->id;
-        $dataUser = User::select('id','foto')->Where('id', $user_id)->firstOrFail();
+        $dataUser = User::select('id', 'foto')->Where('id', $user_id)->firstOrFail();
 
         if ($request->file('foto')) {
             if ($dataUser->foto) {

@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use App\Models\Kategori;
 use App\Models\RoleAI;
 use App\Models\TemplateImage;
 use Gemini;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
-use SebastianBergmann\Template\Template;
 
 class BeritaController extends Controller
 {
