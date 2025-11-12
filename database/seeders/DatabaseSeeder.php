@@ -17,22 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        \App\Models\User::factory()->create([
-            'name' => 'Admin Blog',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('12345678'),
-        ]);
-
-        \App\Models\User::factory()->create([
-            'name' => 'User Biasa',
-            'email' => 'user@gmail.com',
-            'password' => bcrypt('user321'),
-            'level' => 'user',
-        ]);
-
         $this->call([
             KategoriSeeder::class,
             RoleAISeeder::class,
+            RolePermissionSeeder::class,
         ]);
 
         TemplateImage::create([
@@ -78,6 +66,12 @@ creates a [mood] mood. [Aspect ratio].',
             'name' => 'QRCODE Generator',
             'slug' => 'qrcode-generator',
             'description' => 'Membantu membuat QR Code dengan mudah hanya dengan memasukkan URL yang diinginkan.',
+            'status' => 'active',
+        ]);
+        Tools::create([
+            'name' => 'Image To PDF Generator',
+            'slug' => 'image-to-pdf-generator',
+            'description' => 'Membantu mengubah gambar menjadi file PDF dengan mudah.',
             'status' => 'active',
         ]);
     }

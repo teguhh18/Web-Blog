@@ -6,14 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class KategoriController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('kategori-read');
         $title = "Data Kategori";
         $dataKategori = Kategori::all();
 
@@ -28,9 +31,8 @@ class KategoriController extends Controller
      */
     public function create()
     {
+        $this->authorize('kategori-create');
         $title = "Tambah Kategori";
-
-
         return view('admin.kategori.create', compact(
             'title'
         ));
@@ -41,6 +43,7 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('kategori-create');
         // Validasi input
         $validatedData = $request->validate([
             'nama' => 'required|max:255',
@@ -73,6 +76,7 @@ class KategoriController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('kategori-update');
         $title = "Edit Data Kategori";
         $kategori = Kategori::findOrFail($id);
         return  view('admin.kategori.edit', compact(
@@ -85,31 +89,32 @@ class KategoriController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-{
-    $kategori = Kategori::findOrFail($id);
+    {
+        $this->authorize('kategori-update');
+        $kategori = Kategori::findOrFail($id);
 
-    // Validasi input
-    $validatedData = $request->validate([
-        'nama' => 'required|max:255',
-        'foto' => 'nullable|image|max:1024',
-    ]);
+        // Validasi input
+        $validatedData = $request->validate([
+            'nama' => 'required|max:255',
+            'foto' => 'nullable|image|max:1024',
+        ]);
 
-    // Menyimpan file foto jika ada
-    if ($request->file('foto')) {
-        if ($kategori->foto) {
-            Storage::delete('public/' . $kategori->foto);
+        // Menyimpan file foto jika ada
+        if ($request->file('foto')) {
+            if ($kategori->foto) {
+                Storage::delete('public/' . $kategori->foto);
+            }
+            $validatedData['foto'] = $request->file('foto')->store('foto-kategori', 'public');
+            $kategori->foto = $validatedData['foto'];
         }
-        $validatedData['foto'] = $request->file('foto')->store('foto-kategori', 'public');
-        $kategori->foto = $validatedData['foto'];
+
+        // Menyimpan data kategori
+        $kategori->nama = $validatedData['nama'];
+        $kategori->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('admin.kategori.index')->with('success', 'Kategori Berhasil Diubah!!');
     }
-
-    // Menyimpan data kategori
-    $kategori->nama = $validatedData['nama'];
-    $kategori->save();
-
-    // Redirect dengan pesan sukses
-    return redirect()->route('admin.kategori.index')->with('success', 'Kategori Berhasil Diubah!!');
-}
 
 
     /**
@@ -117,6 +122,7 @@ class KategoriController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('kategori-delete');
         $kategori = Kategori::findOrFail($id);
         if ($kategori->foto) {
             Storage::delete('public/' . $kategori->foto);

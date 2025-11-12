@@ -67,8 +67,13 @@
                                         <div class="flex items-center gap-1">
                                             <div class="avatar placeholder">
                                                 <div class="bg-primary text-primary-content rounded-full w-6">
-                                                    <img src="{{ route('storage.show', ['path' => $berita->user->foto]) }}"
-                                                        alt="">
+                                                    @if ($berita->user->foto)
+                                                        <img src="{{ route('storage.show', ['path' => $berita->user->foto]) }}"
+                                                            alt="{{ $berita->user->name }}">
+                                                    @else
+                                                        <span>{{ strtoupper(substr($berita->user->name, 0, 1)) }}</span>
+                                                    @endif
+
                                                 </div>
                                             </div>
                                             <span>{{ $berita->user->name }}</span>

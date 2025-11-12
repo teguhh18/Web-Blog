@@ -34,9 +34,9 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            if (Auth::user()->level === 'admin') {
+            if (Auth::user()->hasRole(['admin', 'penulis'])) {
                 return redirect()->intended('/admin/home');
-            } elseif (Auth::user()->level === 'user') {
+            } elseif (Auth::user()->hasRole('user')) {
                 return redirect()->intended('/');
             }
         }
@@ -66,9 +66,9 @@ class LoginController extends Controller
         try {
             // enkripsi password
             $validatedData['password'] = Hash::make($validatedData['password']);
-            $validatedData['level'] = "user";
 
-            User::create($validatedData);
+            $user = User::create($validatedData);
+            $user->assignRole('user');
             DB::commit();
             return redirect()->route('login')->with(['msg' => 'Registrasi Berhasil!! Silahkan Login', 'class' => 'success']);
         } catch (\Exception $e) {

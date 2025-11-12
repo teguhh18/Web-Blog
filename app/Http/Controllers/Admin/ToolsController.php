@@ -7,14 +7,18 @@ use App\Models\Tools;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ToolsController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('tools-read');
         $title = "Data Tools";
         $tools = Tools::all();
         return view('admin.tools.index', compact('title', 'tools'));
@@ -25,6 +29,7 @@ class ToolsController extends Controller
      */
     public function create()
     {
+        $this->authorize('tools-create');
         $title = "Tambah Tools";
         return view('admin.tools.create', compact('title'));
     }
@@ -34,6 +39,7 @@ class ToolsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('tools-create');
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
@@ -64,6 +70,7 @@ class ToolsController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('tools-update');
         $title = "Edit Tools";
         $tool = Tools::findOrFail($id);
         return view('admin.tools.edit', compact('title', 'tool'));
@@ -74,13 +81,13 @@ class ToolsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('tools-update');
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required',
             'status' => 'required',
         ]);
         $validatedData['slug'] = Str::slug($request->name);
-        // dd($validatedData);
         DB::beginTransaction();
         try {
             $tool = Tools::findOrFail($id);

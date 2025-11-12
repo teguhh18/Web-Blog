@@ -15,6 +15,7 @@
         "mpdf/mpdf": "^8.2",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-pdf": "^1.7",
+        "spatie/laravel-permission": "^6.23",
         "symfony/process": "^6.4"
     },
     "require-dev": {

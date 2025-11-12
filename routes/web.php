@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Admin\BeritaController;
@@ -13,8 +14,10 @@ use App\Http\Controllers\Admin\ToolsController as AdminToolsController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ToolsController;
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\Admin\RoleAIController;
+use App\Http\Controllers\Admin\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,25 +38,38 @@ Route::get('/login', [LoginController::class, 'login'])->name('login')->middlewa
 Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/admin/profile/picture/', [AdminController::class, 'modalProfilePicture'])->name('admin.profile.image')->middleware('auth_admin');
-Route::post('/admin/profile/picture/', [AdminController::class, 'ProfilePictureUpload'])->name('admin.profile.image.upload')->middleware('auth_admin');
-Route::get('/profile/{id}', [AdminController::class, 'adminProfile'])->name('admin.profile')->middleware('auth_admin');
-Route::put('/profile/update/{id}', [AdminController::class, 'updateProfile'])->name('admin.profile.update')->middleware('auth_admin');
-Route::put('/password/update/{id}', [AdminController::class, 'updatePassword'])->name('admin.password.update')->middleware('auth_admin');
+Route::get('/admin/profile/picture/', [AdminController::class, 'modalProfilePicture'])->name('admin.profile.image')->middleware('auth');
+Route::post('/admin/profile/picture/', [AdminController::class, 'ProfilePictureUpload'])->name('admin.profile.image.upload')->middleware('auth');
+Route::get('/profile/{id}', [AdminController::class, 'adminProfile'])->name('admin.profile')->middleware('auth');
+Route::put('/profile/update/{id}', [AdminController::class, 'updateProfile'])->name('admin.profile.update')->middleware('auth');
+Route::put('/password/update/{id}', [AdminController::class, 'updatePassword'])->name('admin.password.update')->middleware('auth');
 
-Route::get('/admin/home', [AdminController::class, 'index'])->middleware('auth_admin')->name('admin.home');
+Route::get('/admin/home', [AdminController::class, 'index'])->middleware('auth')->name('admin.home');
 
-Route::resource('/admin/kategori', KategoriController::class)->middleware('auth_admin')->names('admin.kategori');
-Route::resource('/admin/role-ai', RoleAIController::class)->middleware('auth_admin')->names('admin.role-ai');
-Route::resource('/admin/template-image', TemplateImageController::class)->middleware('auth_admin')->names('admin.template-image');
-Route::resource('/admin/tools', AdminToolsController::class)->middleware('auth_admin')->names('admin.tools');
+Route::resource('/admin/kategori', KategoriController::class)->middleware('auth')->names('admin.kategori');
+Route::resource('/admin/role-ai', RoleAIController::class)->middleware('auth')->names('admin.role-ai');
+Route::resource('/admin/template-image', TemplateImageController::class)->middleware('auth')->names('admin.template-image');
+Route::resource('/admin/tools', AdminToolsController::class)->middleware('auth')->names('admin.tools');
 
-Route::get('/admin/berita/ai', [BeritaController::class, 'berita_ai'])->middleware('auth_admin')->name('admin.ai');
-Route::get('/admin/berita/ai/generate', [BeritaController::class, 'berita_ai_generate'])->middleware('auth_admin')->name('admin.ai.generate');
-Route::post('/admin/berita/ai/generate/image', [BeritaController::class, 'generate_image'])->middleware('auth_admin')->name('admin.ai.generate.image');
-Route::resource('/admin/berita', BeritaController::class)->middleware('auth_admin')->names('admin.berita');
-Route::resource('/admin/user', UserController::class)->middleware('auth_admin')->names('admin.user');
-Route::resource('/admin/comment', AdminCommentController::class)->middleware('auth_admin')->names('admin.comment');
+Route::get('/admin/berita/ai', [BeritaController::class, 'berita_ai'])->middleware('auth')->name('admin.ai');
+Route::get('/admin/berita/ai/generate', [BeritaController::class, 'berita_ai_generate'])->middleware('auth')->name('admin.ai.generate');
+Route::post('/admin/berita/ai/generate/image', [BeritaController::class, 'generate_image'])->middleware('auth')->name('admin.ai.generate.image');
+Route::resource('/admin/berita', BeritaController::class)->middleware('auth')->names('admin.berita');
+Route::resource('/admin/user', UserController::class)->middleware('auth')->names('admin.user');
+Route::resource('/admin/comment', AdminCommentController::class)->middleware('auth')->names('admin.comment');
+
+Route::middleware('auth')->prefix('admin')->group(function () {
+    // User Management with Permissions
+    Route::resource('/user-management', UserManagementController::class)
+        ->parameters(['user-management' => 'user'])
+        ->names('admin.users');
+
+    // Role Management
+    Route::resource('/roles', RoleController::class)->names('admin.roles');
+
+    // Permission Management
+    Route::resource('/permissions', PermissionController::class)->names('admin.permissions');
+});
 
 
 // USER
