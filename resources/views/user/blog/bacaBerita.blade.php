@@ -15,8 +15,14 @@
                         <div class="flex items-center gap-2">
                             <div class="avatar">
                                 <div class="w-10 rounded-full">
-                                    <img src="{{ route('storage.show', ['path' => $berita->user->foto]) }}"
-                                        alt="{{ $berita->user->name }}" />
+                                    @if ($berita->user->foto)
+                                        <img src="{{ route('storage.show', ['path' => $berita->user->foto]) }}"
+                                            alt="{{ $berita->user->name }}" />
+                                    @else
+                                        <img src="{{ asset('user/img/person-2.jpg') }}"
+                                            alt="{{ $berita->user->name }}" />
+                                    @endif
+
                                 </div>
                             </div>
                             <div>

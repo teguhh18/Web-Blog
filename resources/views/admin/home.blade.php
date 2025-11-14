@@ -93,7 +93,12 @@
                         <div class="news">
                             @foreach ($dataBerita as $berita)
                                 <div class="post-item clearfix">
-                                    <img src="{{ asset('storage/' . $berita->foto) }}" alt="">
+                                    @if ($berita->foto)
+                                        <img src="{{ route('storage.show', ['path' => $berita->foto]) }}"
+                                            alt="{{ $berita->title }}">
+                                    @else
+                                        <img src="https://placehold.co/600x400?text=Hello+World" alt="No Image">
+                                    @endif
                                     <h4><a href="#">{{ $berita->title }}</a></h4>
                                     <p>{{ $berita->kategori->nama }}</p>
                                 </div>
@@ -112,7 +117,12 @@
                         <div class="news">
                             @foreach ($populer as $key)
                                 <div class="post-item clearfix">
-                                    <img src="{{ asset('storage/' . $key->foto) }}" alt="">
+                                    @if ($key->foto)
+                                        <img src="{{ route('storage.show', ['path' => $key->foto]) }}"
+                                            alt="{{ $key->title }}">
+                                    @else
+                                        <img src="https://placehold.co/600x400?text=Hello+World" alt="No Image">
+                                    @endif
                                     <h4><a href="#">{{ $key->title }}</a></h4>
                                     <p>{{ $key->kategori->nama }}</p>
                                 </div>

@@ -38,10 +38,12 @@
                                         <span class="text-muted">{{ $comment->comment }}</span>
                                     </td>
                                     <td>
+                                        @can('comment-delete')
                                         <button type="button" class="btn btn-sm btn-outline-danger btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#modalDelete{{ $comment->id }}" title="Hapus">
                                             <i class="bi bi-trash-fill"></i>
                                         </button>
+                                        @endcan
                                     </td>
                                 </tr>
 

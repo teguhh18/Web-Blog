@@ -43,13 +43,19 @@
                                 <td>{{ $berita->user->name }}</td>
 
                                 <td>
-                                    <a href="{{ route('admin.berita.edit', $berita->id) }}" class="btn btn-warning btn-sm"
-                                        title="Edit"> <i class="bi bi-pencil-fill"></i></a>
+                                    @can('berita-update')
+                                        <a href="{{ route('admin.berita.edit', $berita->id) }}" class="btn btn-warning btn-sm"
+                                            title="Edit"> <i class="bi bi-pencil-fill"></i></a>
+                                    @endcan
+
                                     <a href="{{ route('admin.berita.show', $berita->id) }}" class="btn btn-primary btn-sm"
                                         title="Lihat"> <i class="bi bi-eye-fill"></i></a>
-                                    <button type="button" data-bs-toggle="modal"
-                                        data-bs-target="#modalDelete{{ $berita->id }}" class="btn btn-danger btn-sm"
-                                        title="Hapus"> <i class="bi bi-trash-fill"></i></button>
+                                    @can('berita-delete')
+                                        <button type="button" data-bs-toggle="modal"
+                                            data-bs-target="#modalDelete{{ $berita->id }}" class="btn btn-danger btn-sm"
+                                            title="Hapus"> <i class="bi bi-trash-fill"></i></button>
+                                    @endcan
+
                                 </td>
                             </tr>
 

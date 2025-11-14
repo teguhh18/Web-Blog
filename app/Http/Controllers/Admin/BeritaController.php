@@ -10,14 +10,17 @@ use App\Models\TemplateImage;
 use Gemini;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BeritaController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('berita-read');
         $title = "Data Berita";
         $dataBerita = Berita::with(['kategori', 'user'])->orderBy('created_at', 'desc')->get();
         return view('admin.berita.index', compact(
@@ -31,6 +34,7 @@ class BeritaController extends Controller
      */
     public function create()
     {
+        $this->authorize('berita-create');
         $title = "Tambah Berita";
         $dataKategori = Kategori::select('id', 'nama')->get();
 
@@ -45,8 +49,7 @@ class BeritaController extends Controller
      */
     public function store(Request $request)
     {
-
-        // dd($request->all());
+        $this->authorize('berita-create');
         $validatedData = $request->validate([
             'kategori_id' => 'required',
             'title' => 'required|max:255',
@@ -79,6 +82,7 @@ class BeritaController extends Controller
      */
     public function show(Berita $berita, $id)
     {
+        $this->authorize('berita-read');
         $title = "Edit Berita";
         $dataKategori = Kategori::all();
         $dataBerita = Berita::where('id', $id)->first();
@@ -95,6 +99,7 @@ class BeritaController extends Controller
      */
     public function edit(Berita $berita, $id)
     {
+        $this->authorize('berita-update');
         $title = "Edit Berita";
         $dataKategori = Kategori::select('id', 'nama')->get();
         $berita = Berita::where('id', $id)->first();
@@ -110,6 +115,7 @@ class BeritaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('berita-update');
         $dataBerita = Berita::where("id", $id)->first();
         $validatedData  = $request->validate([
             'title'     => 'required|max:255',
@@ -142,9 +148,10 @@ class BeritaController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('berita-delete');
         $berita = Berita::findOrFail($id);
         if ($berita->foto) {
-            -Storage::delete('public/' . $berita->foto);
+            Storage::delete('public/' . $berita->foto);
         }
         Berita::where("id", $berita->id)->delete();
         return back()->with(['msg' => 'Berhasil Menghapus Data', 'class' => 'alert-success']);
@@ -153,6 +160,7 @@ class BeritaController extends Controller
 
     public function berita_ai()
     {
+        $this->authorize('berita-create');
         $title = "Buat Berita Dengan AI";
         $roleAi = RoleAI::all();
         $dataKategori = Kategori::all();
@@ -162,6 +170,7 @@ class BeritaController extends Controller
 
     function berita_ai_generate(Request $request)
     {
+        $this->authorize('berita-create');
         $validatedData = $request->validate([
             'prompt' => 'required',
             'role_ai' => 'required',
@@ -188,6 +197,7 @@ class BeritaController extends Controller
 
     private function generate_prompt_image(Request $request)
     {
+        $this->authorize('berita-create');
         $template_id = $request->template_image;
         $template = TemplateImage::findOrFail($template_id);
 
@@ -200,6 +210,7 @@ class BeritaController extends Controller
 
     public function generate_image(Request $request)
     {
+        $this->authorize('berita-create');
         $request->validate([
             'text' => 'required|string',
             'template_image' => 'required',

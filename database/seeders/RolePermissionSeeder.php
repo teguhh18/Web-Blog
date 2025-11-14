@@ -65,6 +65,14 @@ class RolePermissionSeeder extends Seeder
             'kategori-delete',
         ];
 
+        // Create Permissions untuk Comment Management
+        $commentPermissions = [
+            'comment-create',
+            'comment-read',
+            'comment-update',
+            'comment-delete',
+        ];
+
         // Gabungkan semua permission dan buat dalam satu loop
         $allPermissions = array_merge(
             $userPermissions,
@@ -72,7 +80,8 @@ class RolePermissionSeeder extends Seeder
             $permissionPermissions,
             $beritaPermissions,
             $toolsPermissions,
-            $kategoriPermissions
+            $kategoriPermissions,
+            $commentPermissions
         );
 
         foreach ($allPermissions as $permission) {

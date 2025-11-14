@@ -6,14 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CommentController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('comment-read');
         $title = 'Comment Management';
         $comments = Comment::with('berita', 'user')->latest()->paginate(10);
         return view('admin.comment.index', compact('title', 'comments'));
@@ -64,6 +67,7 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
+        $this->authorize('comment-delete');
         DB::beginTransaction();
         try {
             $comment->delete();

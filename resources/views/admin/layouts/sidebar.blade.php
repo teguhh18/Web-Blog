@@ -58,7 +58,7 @@
                 </a>
             </li>
         @endcan
-
+        @can('comment-read')
         <li class="nav-item">
             <a class="nav-link {{ request()->is('admin/comment*') ? '' : 'collapsed' }}"
                 href="{{ route('admin.comment.index') }}">
@@ -66,7 +66,10 @@
                 <span>Data Comment</span>
             </a>
         </li>
+        @endcan
+
         @can('user-read')
+        <li class="nav-heading">User Management</li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/users*') ? '' : 'collapsed' }}"
                     href="{{ route('admin.users.index') }}">
