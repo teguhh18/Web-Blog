@@ -179,7 +179,7 @@ class BeritaController extends Controller
         $role = RoleAI::select('context')->where('id', $validatedData['role_ai'])->first();
         $client = Gemini::client(env('GEMINI_API_KEY'));
         try {
-            $response = $client->generativeModel('gemini-2.0-flash')
+            $response = $client->generativeModel(env('GEMINI_MODEL'))
                 ->generateContent($role->context . ' ' . $validatedData['prompt']);
 
             $text = $response->candidates[0]->content->parts[0]->text;
@@ -202,7 +202,7 @@ class BeritaController extends Controller
         $template = TemplateImage::findOrFail($template_id);
 
         $client = Gemini::client(env('GEMINI_API_KEY'));
-        $prompt_image = $client->generativeModel('gemini-2.0-flash')
+        $prompt_image = $client->generativeModel(env('GEMINI_MODEL'))
             ->generateContent('Buatkan Prompt untuk generate image berdasarkan teks berikut: ' . $request->text . 'jangan berikan respon selain prompt, hanya berikan prompt nya saja. gunakan template ini untuk promptnya (' . $template->template . ')');
 
         return $prompt_image->candidates[0]->content->parts[0]->text;
@@ -220,7 +220,7 @@ class BeritaController extends Controller
             $client = Gemini::client(env('GEMINI_API_KEY'));
 
             $text = $this->generate_prompt_image($request);
-            $result = $client->generativeModel('gemini-2.5-flash-image-preview')
+            $result = $client->generativeModel(env('GEMINI_MODEL_IMAGE'))
                 ->generateContent($text);
             $image = $result->candidates[0]->content->parts[1]->inlineData->data;
             if ($image) {
