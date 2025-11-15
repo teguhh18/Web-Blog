@@ -6,14 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\TemplateImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TemplateImageController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('template-image-read');
         $title = "Template Image";
         $templates = TemplateImage::all();
         return view('admin.template-image.index', compact('title', 'templates'));
@@ -24,6 +27,7 @@ class TemplateImageController extends Controller
      */
     public function create()
     {
+        $this->authorize('template-image-create');
         $title = "Tambah Template Image";
         return view('admin.template-image.create', compact('title'));
     }
@@ -33,6 +37,7 @@ class TemplateImageController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('template-image-create');
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'template' => 'required|string',
@@ -61,6 +66,7 @@ class TemplateImageController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('template-image-update');
         $title = "Edit Template Image";
         $templateImage = TemplateImage::findOrFail($id);
         return view('admin.template-image.edit', compact('title', 'templateImage'));
@@ -71,6 +77,7 @@ class TemplateImageController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('template-image-update');
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'template' => 'required|string',
@@ -92,6 +99,7 @@ class TemplateImageController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('template-image-delete');
         DB::beginTransaction();
         try {
             $templateImage = TemplateImage::findOrFail($id);

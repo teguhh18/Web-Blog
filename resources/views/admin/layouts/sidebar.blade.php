@@ -18,28 +18,21 @@
             </li>
         @endcan
 
+        @can('ai-read')
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('admin/role-ai*') || request()->is('admin/template-image*') ? '' : 'collapsed' }}"
-                data-bs-target="#ai-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-robot"></i><span>AI</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a href="{{ route('admin.role-ai.index') }}" class="nav-link {{ request()->is('admin/role-ai*') ? '' : 'collapsed' }}">
+                <i class="bi bi-cpu"></i><span>Role AI</span>
             </a>
-            <ul id="ai-nav"
-                class="nav-content collapse {{ request()->is('admin/role-ai*') || request()->is('admin/template-image*') ? 'show' : '' }}"
-                data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('admin.role-ai.index') }}"
-                        class="{{ request()->is('admin/role-ai*') ? 'active' : '' }}">
-                        <i class="bi bi-circle"></i><span>Role AI</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.template-image.index') }}"
-                        class="{{ request()->is('admin/template-image*') ? 'active' : '' }}">
-                        <i class="bi bi-circle"></i><span>Template Image</span>
-                    </a>
-                </li>
-            </ul>
         </li>
+        @endcan
+        @can('template-image-read')
+        <li class="nav-item">
+            <a href="{{ route('admin.template-image.index') }}"
+                class="nav-link {{ request()->is('admin/template-image*') ? '' : 'collapsed' }}">
+                <i class="bi bi-image"></i><span>Template Image</span>
+            </a>
+        </li>
+        @endcan
         @can('berita-read')
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/berita*') ? '' : 'collapsed' }}"
@@ -59,17 +52,17 @@
             </li>
         @endcan
         @can('comment-read')
-        <li class="nav-item">
-            <a class="nav-link {{ request()->is('admin/comment*') ? '' : 'collapsed' }}"
-                href="{{ route('admin.comment.index') }}">
-                <i class="bi bi-chat-dots"></i>
-                <span>Data Comment</span>
-            </a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/comment*') ? '' : 'collapsed' }}"
+                    href="{{ route('admin.comment.index') }}">
+                    <i class="bi bi-chat-dots"></i>
+                    <span>Data Comment</span>
+                </a>
+            </li>
         @endcan
 
         @can('user-read')
-        <li class="nav-heading">User Management</li>
+            <li class="nav-heading">User Management</li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/users*') ? '' : 'collapsed' }}"
                     href="{{ route('admin.users.index') }}">

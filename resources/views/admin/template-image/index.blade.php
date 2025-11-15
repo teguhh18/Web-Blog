@@ -1,9 +1,11 @@
 @extends('admin.layouts.admin')
 @section('main')
     <div class="container mt-4">
+        @can('template-image-create')
         <a href="{{ route('admin.template-image.create') }}" class="btn btn-primary btn-sm mb-3"> <i
                 class="bi bi-plus-circle-fill"></i>
             Tambah</a>
+        @endcan
         <div>
             @if (session('msg'))
                 <div class="alert alert-danger">
@@ -37,14 +39,18 @@
                                         <span class="text-muted">{{ $template->template }}</span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.template-image.edit', $template->id) }}"
-                                            class="btn btn-sm btn-outline-warning">
-                                            <i class="bi bi-pencil-fill" title="Edit"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                                            data-bs-target="#modalDelete{{ $template->id }}">
-                                            <i class="bi bi-trash-fill" title="Hapus"></i>
-                                        </button>
+                                        @can('template-image-update')
+                                            <a href="{{ route('admin.template-image.edit', $template->id) }}"
+                                                class="btn btn-sm btn-outline-warning">
+                                                <i class="bi bi-pencil-fill" title="Edit"></i>
+                                            </a>
+                                        @endcan
+                                        @can('template-image-delete')
+                                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                                data-bs-target="#modalDelete{{ $template->id }}">
+                                                <i class="bi bi-trash-fill" title="Hapus"></i>
+                                            </button>
+                                        @endcan
                                     </td>
                                 </tr>
 

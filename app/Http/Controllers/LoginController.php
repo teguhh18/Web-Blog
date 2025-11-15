@@ -34,10 +34,10 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            if (Auth::user()->hasRole(['admin', 'penulis'])) {
-                return redirect()->intended('/admin/home');
-            } elseif (Auth::user()->hasRole('user')) {
+            if (Auth::user()->hasRole('user')) {
                 return redirect()->intended('/');
+            } else {
+                return redirect()->route('admin.home')->with(['msg' => 'Login Berhasil!!', 'class' => 'success']);
             }
         }
 

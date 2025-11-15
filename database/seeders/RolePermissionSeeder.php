@@ -73,6 +73,27 @@ class RolePermissionSeeder extends Seeder
             'comment-delete',
         ];
 
+        // Create Permissions access dashboard
+        $dashboardPermissions = [
+            'dashboard-access',
+        ];
+
+        // Create Permissions untuk Role Ai Management
+        $roleAiPermissions = [
+            'ai-create',
+            'ai-read',
+            'ai-update',
+            'ai-delete',
+        ];
+
+        // Create Permissions untuk Template Image Management
+        $templateImagePermissions = [
+            'template-image-create',
+            'template-image-read',
+            'template-image-update',
+            'template-image-delete',
+        ];
+
         // Gabungkan semua permission dan buat dalam satu loop
         $allPermissions = array_merge(
             $userPermissions,
@@ -81,7 +102,10 @@ class RolePermissionSeeder extends Seeder
             $beritaPermissions,
             $toolsPermissions,
             $kategoriPermissions,
-            $commentPermissions
+            $commentPermissions,
+            $dashboardPermissions,
+            $roleAiPermissions,
+            $templateImagePermissions
         );
 
         foreach ($allPermissions as $permission) {
@@ -96,11 +120,11 @@ class RolePermissionSeeder extends Seeder
 
         // Role: Staff - Read dan Update User
         $staffRole = Role::create(['name' => 'penulis']);
-        $staffRole->givePermissionTo($beritaPermissions);
+        $staffRole->givePermissionTo($beritaPermissions, $dashboardPermissions);
 
         // Role: User/Pembaca - Read Only
         $userRole = Role::create(['name' => 'user']);
-        $userRole->givePermissionTo(['berita-read']);
+        // $userRole->givePermissionTo(['berita-read']);
 
         // Create super admin user (optional)
         $admin = User::create([

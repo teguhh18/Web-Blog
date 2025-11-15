@@ -9,11 +9,16 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class AdminController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
+        $this->authorize('dashboard-access');
         $title = "Dashboard";
         $berita = Berita::count();
         $kategori = Kategori::count();
@@ -32,6 +37,7 @@ class AdminController extends Controller
 
     public function adminProfile($id)
     {
+        $this->authorize('dashboard-access');
         $title = "Profile";
         $user = User::select('id', 'name', 'email', 'foto')->Where('id', decrypt($id))->firstOrFail();
         return view('admin.profile', compact(
@@ -42,6 +48,7 @@ class AdminController extends Controller
 
     public function updateProfile(Request $request, $id)
     {
+        $this->authorize('dashboard-access');
         $user = User::Where('id', decrypt($id))->firstOrFail();
         $rules = [
             'name' => 'required|max:255',
@@ -68,6 +75,7 @@ class AdminController extends Controller
 
     public function updatePassword(Request $request, $id)
     {
+        $this->authorize('dashboard-access');
         $user = User::findOrFail(decrypt($id));
 
         $validatedData = $request->validate([
@@ -87,6 +95,7 @@ class AdminController extends Controller
 
     public function modalProfilePicture()
     {
+        $this->authorize('dashboard-access');
         $user_id = auth()->user()->id;
         $dataUser = User::select('id', 'foto')->Where('id', $user_id)->firstOrFail();
 
@@ -99,6 +108,7 @@ class AdminController extends Controller
 
     public function ProfilePictureUpload(Request $request)
     {
+        $this->authorize('dashboard-access');
         $request->validate([
             'foto' => 'required|image|max:2048',
         ]);

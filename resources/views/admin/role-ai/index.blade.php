@@ -1,8 +1,11 @@
 @extends('admin.layouts.admin')
 @section('main')
     <div class="container mt-4">
-        <a href="{{ route('admin.role-ai.create') }}" class="btn btn-primary btn-sm mb-3"> <i class="bi bi-plus-circle-fill"></i>
+        @can('ai-create')
+        <a href="{{ route('admin.role-ai.create') }}" class="btn btn-primary btn-sm mb-3"> <i
+                class="bi bi-plus-circle-fill"></i>
             Tambah</a>
+        @endcan
         <div>
             @if (session('msg'))
                 <div class="alert alert-danger">
@@ -36,14 +39,18 @@
                                         <span class="text-muted">{{ $role->context }}</span>
                                     </td>
                                     <td>
+                                        @can('ai-update')
                                             <a href="{{ route('admin.role-ai.edit', $role->id) }}"
                                                 class="btn btn-sm btn-outline-warning">
                                                 <i class="bi bi-pencil-fill" title="Edit"></i>
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-outline-danger"
-                                                data-bs-toggle="modal" data-bs-target="#modalDelete{{ $role->id }}">
+                                        @endcan
+                                        @can('ai-delete')
+                                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                                data-bs-target="#modalDelete{{ $role->id }}">
                                                 <i class="bi bi-trash-fill" title="Hapus"></i>
                                             </button>
+                                        @endcan
                                     </td>
                                 </tr>
 

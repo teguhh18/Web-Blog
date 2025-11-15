@@ -6,14 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\RoleAI;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class RoleAIController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('ai-read');
         $title = "Data Role AI";
         $data =  RoleAI::all();
 
@@ -25,6 +28,7 @@ class RoleAIController extends Controller
      */
     public function create()
     {
+        $this->authorize('ai-create');
         $title = "Tambah Role AI";
         return view('admin.role-ai.create', compact('title'));
     }
@@ -34,6 +38,7 @@ class RoleAIController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('ai-create');
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'context' => 'required|string',
@@ -62,6 +67,7 @@ class RoleAIController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('ai-update');
         $title = "Edit Role AI";
         $roleAI = RoleAI::findOrFail($id);
         return view('admin.role-ai.edit', compact('title', 'roleAI'));
@@ -72,6 +78,7 @@ class RoleAIController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('ai-update');
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'context' => 'required|string',
@@ -93,6 +100,7 @@ class RoleAIController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('ai-delete');
         DB::beginTransaction();
         try {
             $roleAI = RoleAI::findOrFail($id);

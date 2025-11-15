@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\LoginController;
@@ -30,35 +29,28 @@ use App\Http\Controllers\Admin\RoleController;
 |
 */
 
-// ADMIN
-Route::get('/register', [LoginController::class, 'register'])->name('register')->middleware('guest');
-Route::post('/register/store', [LoginController::class, 'registerStore'])->name('register.store')->middleware('guest');
+// AUTHENTICATION ROUTES
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [LoginController::class, 'register'])->name('register');
+    Route::post('/register/store', [LoginController::class, 'registerStore'])->name('register.store');
 
-Route::get('/login', [LoginController::class, 'login'])->name('login')->middleware('guest');
+    Route::get('/login', [LoginController::class, 'login'])->name('login');
+
+    Route::get('/forgot-password', [PasswordResetController::class, 'showForgotForm'])->name('password.forgot');
+    Route::post('/forgot-password', [PasswordResetController::class, 'sendOTP'])->name('password.email');
+
+    Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+    Route::post('reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
+});
 Route::post('/login', [LoginController::class, 'authenticate'])->name('authenticate');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/admin/profile/picture/', [AdminController::class, 'modalProfilePicture'])->name('admin.profile.image')->middleware('auth');
-Route::post('/admin/profile/picture/', [AdminController::class, 'ProfilePictureUpload'])->name('admin.profile.image.upload')->middleware('auth');
-Route::get('/profile/{id}', [AdminController::class, 'adminProfile'])->name('admin.profile')->middleware('auth');
-Route::put('/profile/update/{id}', [AdminController::class, 'updateProfile'])->name('admin.profile.update')->middleware('auth');
-Route::put('/password/update/{id}', [AdminController::class, 'updatePassword'])->name('admin.password.update')->middleware('auth');
 
-Route::get('/admin/home', [AdminController::class, 'index'])->middleware('auth')->name('admin.home');
 
-Route::resource('/admin/kategori', KategoriController::class)->middleware('auth')->names('admin.kategori');
-Route::resource('/admin/role-ai', RoleAIController::class)->middleware('auth')->names('admin.role-ai');
-Route::resource('/admin/template-image', TemplateImageController::class)->middleware('auth')->names('admin.template-image');
-Route::resource('/admin/tools', AdminToolsController::class)->middleware('auth')->names('admin.tools');
-
-Route::get('/admin/berita/ai', [BeritaController::class, 'berita_ai'])->middleware('auth')->name('admin.ai');
-Route::get('/admin/berita/ai/generate', [BeritaController::class, 'berita_ai_generate'])->middleware('auth')->name('admin.ai.generate');
-Route::post('/admin/berita/ai/generate/image', [BeritaController::class, 'generate_image'])->middleware('auth')->name('admin.ai.generate.image');
-Route::resource('/admin/berita', BeritaController::class)->middleware('auth')->names('admin.berita');
-Route::resource('/admin/user', UserController::class)->middleware('auth')->names('admin.user');
-Route::resource('/admin/comment', AdminCommentController::class)->middleware('auth')->names('admin.comment');
-
+// PANEL ADMIN
 Route::middleware('auth')->prefix('admin')->group(function () {
+    Route::get('/home', [AdminController::class, 'index'])->name('admin.home');
+
     // User Management with Permissions
     Route::resource('/user-management', UserManagementController::class)
         ->parameters(['user-management' => 'user'])
@@ -69,10 +61,27 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 
     // Permission Management
     Route::resource('/permissions', PermissionController::class)->names('admin.permissions');
+
+    Route::get('/profile/picture/', [AdminController::class, 'modalProfilePicture'])->name('admin.profile.image');
+    Route::post('/profile/picture/', [AdminController::class, 'ProfilePictureUpload'])->name('admin.profile.image.upload');
+    Route::get('/profile/{id}', [AdminController::class, 'adminProfile'])->name('admin.profile');
+    Route::put('/profile/update/{id}', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::put('/password/update/{id}', [AdminController::class, 'updatePassword'])->name('admin.password.update');
+
+    Route::resource('/kategori', KategoriController::class)->names('admin.kategori');
+    Route::resource('/role-ai', RoleAIController::class)->names('admin.role-ai');
+    Route::resource('/template-image', TemplateImageController::class)->names('admin.template-image');
+    Route::resource('/tools', AdminToolsController::class)->names('admin.tools');
+
+    Route::get('/berita/ai', [BeritaController::class, 'berita_ai'])->name('admin.ai');
+    Route::get('/berita/ai/generate', [BeritaController::class, 'berita_ai_generate'])->name('admin.ai.generate');
+    Route::post('/berita/ai/generate/image', [BeritaController::class, 'generate_image'])->name('admin.ai.generate.image');
+    Route::resource('/berita', BeritaController::class)->names('admin.berita');
+    Route::resource('/comment', AdminCommentController::class)->names('admin.comment');
 });
 
 
-// USER
+// USER FRONT (BLOG)
 Route::get('/', [HomeController::class, 'index'])->name('user.home');
 Route::get('/about', [HomeController::class, 'about'])->name('user.about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('user.contact');
@@ -85,24 +94,24 @@ Route::get('/berita/kategori/{slug}', [HomeController::class, 'beritaByKategori'
 
 Route::get('/search', [HomeController::class, 'search'])->name('user.berita.search');
 
-Route::post('/comment/{slug}', [CommentController::class, 'store'])->name('user.comment.store')->middleware('auth');
-
-Route::get('/userProfile/{id}', [LoginController::class, 'userProfile'])->name('user.profile')->middleware('auth');
-Route::put('/user/profile/update/{id}', [LoginController::class, 'updateProfile'])->name('user.profile.update')->middleware('auth');
-Route::put('/user/profile/password/{id}', [LoginController::class, 'updatePassword'])->name('user.password.update')->middleware('auth');
-Route::resource('/user/tools', ToolsController::class)->middleware('auth')->names('user.tools');
 
 
-// RESET PASSWORD
-Route::get('/forgot-password', [PasswordResetController::class, 'showForgotForm'])->name('password.forgot');
-Route::post('/forgot-password', [PasswordResetController::class, 'sendOTP'])->name('password.email');
+Route::middleware('auth')->group(function () {
+    // User Kirim Comment
+    Route::post('/comment/{slug}', [CommentController::class, 'store'])->name('user.comment.store');
 
-Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
-Route::post('reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
+    // User Custom Profile & Password
+    Route::get('/userProfile/{id}', [LoginController::class, 'userProfile'])->name('user.profile');
+    Route::put('/user/profile/update/{id}', [LoginController::class, 'updateProfile'])->name('user.profile.update');
+    Route::put('/user/profile/password/{id}', [LoginController::class, 'updatePassword'])->name('user.password.update');
 
-// TOOLS
-Route::post('user/image-to-pdf', [ToolsController::class, 'imageToPdf'])->name('user.tools.imageToPdf')->middleware('auth');
-Route::get('user/qrcode-generator', [ToolsController::class, 'qrcodeGenerator'])->name('user.tools.qrcode')->middleware('auth');
+    // User Tools Resource
+    Route::resource('/user/tools', ToolsController::class)->names('user.tools');
+    // TOOLS
+    Route::post('user/image-to-pdf', [ToolsController::class, 'imageToPdf'])->name('user.tools.imageToPdf');
+    Route::get('user/qrcode-generator', [ToolsController::class, 'qrcodeGenerator'])->name('user.tools.qrcode');
+});
+
 
 // AKSES FILE DI STORAGE TANPA STORAGE LINK
 Route::get('/storage-file/{path}', [FileController::class, 'show'])->where('path', '.*')->name('storage.show');
