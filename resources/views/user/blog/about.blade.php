@@ -1,74 +1,111 @@
 @extends('user.new-layouts.main')
-
 @section('main')
-<main>
-
-  <!-- Hero Section -->
-  <div class="bg-base-200">
-    <div class="container mx-auto px-4 py-16 text-center">
-      <h1 class="text-5xl font-bold">About Us</h1>
-      <p class="py-6 text-lg">Discover our story, our mission, and the vision that drives us forward.</p>
+    <!-- Hero Section -->
+    <div class="bg-neutral py-20">
+        <div class="container mx-auto px-4 text-center" data-aos="fade-up">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4 text-neutral-content">About Us</h1>
+            <p class="text-lg md:text-xl text-neutral-content/70 max-w-2xl mx-auto">
+                Discover our story, our mission, and the vision that drives us forward.
+            </p>
+        </div>
     </div>
-  </div>
 
-  <!-- Main Content Section -->
-  <section class="py-16">
-    <div class="container mx-auto px-4">
+    <!-- Main Content -->
+    <section class="py-16">
+        <div class="container mx-auto px-4 max-w-6xl">
 
-      <!-- Company History -->
-      <div class="hero min-h-[50vh] bg-base-100 rounded-box overflow-hidden mb-12">
-        <div class="hero-content flex-col lg:flex-row gap-8 w-full">
-          <img src="{{ asset('user/img/post-landscape-2.jpg') }}" class="w-full lg:max-w-md rounded-lg shadow-2xl" alt="Company History" />
-          <div class="lg:ms-8">
-            <p class="text-sm font-semibold text-primary">OUR STORY</p>
-            <h2 class="text-4xl font-bold mt-2 mb-4">Company History</h2>
-            <p class="py-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, perspiciatis repellat maxime, adipisci non ipsam at itaque rerum vitae, necessitatibus nulla animi expedita cumque provident inventore? Voluptatum in tempora earum deleniti, culpa odit veniam, ea reiciendis sunt ullam temporibus aut!</p>
-            <p>Fugit eaque illum blanditiis, quo exercitationem maiores autem laudantium unde excepturi dolores quasi eos vero harum ipsa quam laborum illo aut facere voluptates aliquam adipisci sapiente beatae ullam.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Mission & Vision -->
-      <div class="hero min-h-[50vh] bg-base-100 rounded-box overflow-hidden">
-        <div class="hero-content flex-col lg:flex-row-reverse gap-8 w-full">
-          <img src="{{ asset('user/img/post-landscape-1.jpg') }}" class="w-full lg:max-w-md rounded-lg shadow-2xl" alt="Mission and Vision" />
-          <div class="lg:me-8">
-            <p class="text-sm font-semibold text-primary">OUR GOALS</p>
-            <h2 class="text-4xl font-bold mt-2 mb-4">Mission &amp; Vision</h2>
-            <p class="py-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, perspiciatis repellat maxime, adipisci non ipsam at itaque rerum vitae, necessitatibus nulla animi expedita cumque provident inventore? Voluptatum in tempora earum deleniti, culpa odit veniam, ea reiciendis sunt ullam temporibus aut!</p>
-            <p>Fugit eaque illum blanditiis, quo exercitationem maiores autem laudantium unde excepturi dolores quasi eos vero harum ipsa quam laborum illo aut facere voluptates aliquam adipisci sapiente beatae ullam.</p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Latest News Section -->
-  <section class="py-16 bg-base-200">
-    <div class="container mx-auto px-4">
-      <div class="flex flex-wrap items-center justify-between gap-12">
-        <!-- Text Content -->
-        <div class="w-full lg:w-1/2 xl:w-5/12">
-          <h2 class="text-4xl font-bold mb-4">Berita Terbaru</h2>
-          <p class="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, rem eaque vel est asperiores iste pariatur placeat molestias, rerum provident ea maiores debitis eum earum esse quas architecto! Minima, voluptatum!</p>
-          <p class="mb-6">At magni dolore ullam odio sapiente ipsam, numquam eius minus animi inventore alias quam fugit corrupti error iste laboriosam dolorum culpa doloremque eligendi repellat iusto vel impedit odit cum.</p>
-          <a href="{{ route('user.berita') }}" class="btn btn-primary">Lihat Semua Berita</a>
-        </div>
-        <!-- Image Gallery -->
-        <div class="w-full lg:w-1/2 xl:w-6/12">
-          <div class="flex gap-4 items-center">
-            <div class="w-1/2">
-              <img src="{{ asset('user/img/post-portrait-3.jpg') }}" alt="Latest news photo 1" class="rounded-lg shadow-lg w-full h-auto">
+            <!-- Company History -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20" data-aos="fade-right">
+                <div class="order-2 lg:order-1">
+                    <span class="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">
+                        OUR STORY
+                    </span>
+                    <h2 class="text-4xl font-bold mb-6">Company History</h2>
+                    <div class="space-y-4 text-base-content/70 leading-relaxed">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, perspiciatis repellat maxime,
+                            adipisci non ipsam at itaque rerum vitae, necessitatibus nulla animi expedita cumque provident
+                            inventore? Voluptatum in tempora earum deleniti, culpa odit veniam.
+                        </p>
+                        <p>
+                            Fugit eaque illum blanditiis, quo exercitationem maiores autem laudantium unde excepturi dolores
+                            quasi eos vero harum ipsa quam laborum illo aut facere voluptates aliquam adipisci sapiente
+                            beatae ullam temporibus aut!
+                        </p>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <img src="{{ asset('user/img/post-landscape-2.jpg') }}"
+                         class="w-full rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+                         alt="Company History"/>
+                </div>
             </div>
-            <div class="w-1/2 mt-16">
-              <img src="{{ asset('user/img/post-portrait-4.jpg') }}" alt="Latest news photo 2" class="rounded-lg shadow-lg w-full h-auto">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-</main><!-- End #main -->
+            <!-- Mission & Vision -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20" data-aos="fade-left">
+                <div>
+                    <img src="{{ asset('user/img/post-landscape-1.jpg') }}"
+                         class="w-full rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+                         alt="Mission and Vision"/>
+                </div>
+                <div>
+                    <span class="inline-block px-4 py-1 bg-secondary/10 text-secondary rounded-full text-sm font-semibold mb-4">
+                        OUR GOALS
+                    </span>
+                    <h2 class="text-4xl font-bold mb-6">Mission & Vision</h2>
+                    <div class="space-y-4 text-base-content/70 leading-relaxed">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, perspiciatis repellat maxime,
+                            adipisci non ipsam at itaque rerum vitae, necessitatibus nulla animi expedita cumque provident
+                            inventore? Voluptatum in tempora earum deleniti, culpa odit veniam.
+                        </p>
+                        <p>
+                            Fugit eaque illum blanditiis, quo exercitationem maiores autem laudantium unde excepturi dolores
+                            quasi eos vero harum ipsa quam laborum illo aut facere voluptates aliquam adipisci sapiente
+                            beatae ullam temporibus aut!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Latest News CTA -->
+    <section class="py-16 bg-base-200 border-y border-base-300">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center" data-aos="fade-up">
+                <!-- Text Content -->
+                <div>
+                    <h2 class="text-4xl font-bold mb-6">Berita Terbaru</h2>
+                    <p class="text-base-content/70 mb-4 leading-relaxed">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, rem eaque vel est asperiores iste
+                        pariatur placeat molestias, rerum provident ea maiores debitis eum earum esse quas architecto!
+                        Minima, voluptatum!
+                    </p>
+                    <p class="text-base-content/70 mb-8 leading-relaxed">
+                        At magni dolore ullam odio sapiente ipsam, numquam eius minus animi inventore alias quam fugit
+                        corrupti error iste laboriosam dolorum culpa doloremque eligendi repellat iusto vel impedit odit cum.
+                    </p>
+                    <a href="{{ route('user.berita') }}" class="btn btn-primary btn-lg gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                        </svg>
+                        Lihat Semua Berita
+                    </a>
+                </div>
+
+                <!-- Image Gallery -->
+                <div class="grid grid-cols-2 gap-4">
+                    <img src="{{ asset('user/img/post-portrait-3.jpg') }}"
+                         alt="Latest news photo 1"
+                         class="rounded-2xl shadow-lg w-full h-auto hover:shadow-xl transition-shadow duration-300"/>
+                    <img src="{{ asset('user/img/post-portrait-4.jpg') }}"
+                         alt="Latest news photo 2"
+                         class="rounded-2xl shadow-lg w-full h-auto mt-8 hover:shadow-xl transition-shadow duration-300"/>
+                </div>
+            </div>
+        </div>
+    </section>
 @endsection

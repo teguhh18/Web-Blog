@@ -1,101 +1,80 @@
 @extends('user.new-layouts.main')
 @section('main')
     <!-- Hero Section -->
-    <div class="hero min-h-96 hero-gradient">
-        <div class="hero-overlay bg-opacity-20"></div>
-        <div class="hero-content text-neutral-content text-center" data-aos="fade-show">
-            <div class="max-w-md">
-                <div class="flex items-center justify-center mb-4">
-                    <svg class="w-16 h-16 mr-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h1 class="text-5xl font-bold">Web Blog</h1>
+    <div class="hero min-h-[400px] bg-neutral relative overflow-hidden">
+        <div class="hero-content text-neutral-content text-center relative z-10" data-aos="fade-up">
+            <div class="max-w-2xl">
+                <div class="flex items-center justify-center mb-6">
+                    <div class="w-16 h-16 bg-neutral-content/10 rounded-full flex items-center justify-center">
+                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
                 </div>
-                <p class="py-6">Template blog modern dengan DaisyUI dan Tailwind CSS. Responsif, elegan, dan mudah
-                    dikustomisasi.</p>
-                <div class="flex flex-wrap justify-center gap-2">
-                    <div class="badge badge-outline badge-lg">HTML5 Semantik</div>
-                    <div class="badge badge-outline badge-lg">DaisyUI</div>
-                    <div class="badge badge-outline badge-lg">Tailwind CSS</div>
+                <h1 class="text-5xl md:text-6xl font-bold mb-4">Web Blog</h1>
+                <p class="text-lg md:text-xl mb-6 text-neutral-content/80">
+                    Temukan artikel menarik seputar teknologi, programming, dan pengembangan web
+                </p>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <a href="{{ route('user.berita') }}" class="btn btn-primary btn-lg">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                        </svg>
+                        Baca Artikel
+                    </a>
+                    <a href="{{ route('user.about') }}" class="btn btn-ghost btn-lg text-neutral-content hover:bg-neutral-content/10">
+                        Tentang Kami
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Main Content -->
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4 py-12">
+        <!-- Section Header -->
+        <div class="flex items-center justify-between mb-8" data-aos="fade-up">
+            <div>
+                <h2 class="text-3xl font-bold flex items-center gap-3">
+                    <svg class="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Artikel Terbaru
+                </h2>
+                <p class="text-base-content/60 mt-2">Jelajahi artikel-artikel terbaru dari para penulis kami</p>
+            </div>
+            <a href="{{ route('user.berita') }}" class="btn btn-outline btn-primary hidden sm:flex">
+                Lihat Semua
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Articles Section (2/3 width) -->
             <div class="lg:col-span-2">
-                <!-- Section Header -->
-                <div class="mb-8" data-aos="fade-show">
-                    <div class="flex items-center mb-4">
-                        <svg class="w-8 h-8 mr-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <h2 class="text-4xl font-bold">Artikel Terbaru</h2>
-                    </div>
-                    <p class="text-base-content/70 text-lg">Temukan artikel-artikel terbaru seputar teknologi, programming,
-                        dan pengembangan web</p>
-                </div>
-
-                <!-- Regular Articles Grid -->
-                <div class="grid md:grid-cols-3 gap-4">
-
-                    @if ($dataBerita->isEmpty())
-                        <p class="text-center text-base-content/70 col-span-3">Tidak ada artikel tersedia.</p>
-                    @else
-                        @foreach ($dataBerita as $berita)
-                            <article class="card bg-base-100 shadow-lg glass-card" data-aos="fade-up" data-aos-delay="100">
-                                <figure>
-                                    <img src="{{ route('storage.show', ['path' => $berita->foto]) }}"
-                                        alt="{{ $berita->title }}" class="w-full h-48 object-cover" />
-                                </figure>
-                                <div class="card-body">
-                                    {{-- <div class="flex flex-wrap gap-1 mb-2">
-                                        <div class="badge badge-success badge-sm">vue.js</div>
-                                        <div class="badge badge-outline badge-sm">frontend</div>
-                                    </div> --}}
-                                    <h3 class="card-title text-lg">
-                                        <a href="{{ route('user.berita.baca', $berita->slug) }}"
-                                            class="link link-hover">{{ $berita->title }}</a>
-                                    </h3>
-                                    <p class="text-sm text-base-content/70 mb-3">
-                                        {{ Str::limit(strip_tags($berita->berita), 100, '...') }}
-                                    </p>
-                                    <div class="flex justify-between items-center text-xs text-base-content/60">
-                                        <div class="flex items-center gap-1">
-                                            <div class="avatar placeholder">
-                                                <div class="bg-primary text-primary-content rounded-full w-6">
-                                                    @if ($berita->user->foto)
-                                                        <img src="{{ route('storage.show', ['path' => $berita->user->foto]) }}"
-                                                            alt="{{ $berita->user->name }}">
-                                                    @else
-                                                        <span>{{ strtoupper(substr($berita->user->name, 0, 1)) }}</span>
-                                                    @endif
-
-                                                </div>
-                                            </div>
-                                            <span>{{ $berita->user->name }}</span>
-                                        </div>
-                                        <time>{{ $berita->created_at->format('d M Y') }}</time>
-                                    </div>
-                                </div>
-                            </article>
+                @if ($dataBerita->isEmpty())
+                    <x-empty-state message="Belum ada artikel tersedia saat ini." />
+                @else
+                    <div class="grid md:grid-cols-2 gap-6">
+                        @foreach ($dataBerita as $index => $berita)
+                            <x-article-card :article="$berita" :delay="$index * 100" />
                         @endforeach
-                    @endif
-                </div>
+                    </div>
 
-                {{-- <!-- Load More Button -->
-                <div class="text-center mt-8" data-aos="fade-up" data-aos-delay="100">
-                    <button class="btn btn-outline btn-primary btn-wide">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        Muat Artikel Lainnya
-                    </button>
-                </div> --}}
+                    @if($dataBerita->hasPages())
+                        <div class="mt-8 flex justify-center">
+                            {{ $dataBerita->links() }}
+                        </div>
+                    @endif
+                @endif
+
+                <div class="mt-8 text-center sm:hidden">
+                    <a href="{{ route('user.berita') }}" class="btn btn-outline btn-primary btn-wide">
+                        Lihat Semua Artikel
+                    </a>
+                </div>
             </div>
 
             <!-- Sidebar (1/3 width) -->

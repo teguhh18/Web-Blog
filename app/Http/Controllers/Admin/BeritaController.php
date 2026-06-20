@@ -11,6 +11,7 @@ use Gemini;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\DB;
 
 class BeritaController extends Controller
 {
@@ -58,22 +59,28 @@ class BeritaController extends Controller
             'generated_image_base64' => 'required_without:foto',
         ]);
 
-        if ($request->file('foto')) {
-            $validatedData['foto'] = $request->file('foto')->store('foto-berita', 'public');
+        DB::beginTransaction();
+        try {
+            if ($request->file('foto')) {
+                $validatedData['foto'] = $request->file('foto')->store('foto-berita', 'public');
+            }
+
+            if ($request->input('generated_image_base64')) {
+                $imageData = $request->input('generated_image_base64');
+                $imageName = 'foto-berita/' . uniqid() . '.png';
+                Storage::disk('public')->put($imageName, base64_decode($imageData));
+                $validatedData['foto'] = $imageName;
+            }
+
+            $validatedData['user_id'] = auth()->user()->id;
+
+            Berita::create($validatedData);
+            DB::commit();
+            return redirect()->route('admin.berita.index')->with(['msg' => 'Berita Berhasil Ditambahkan', 'class' => 'success']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with(['msg' => 'Gagal menambahkan berita: ' . $e->getMessage(), 'class' => 'alert-danger']);
         }
-
-        if ($request->input('generated_image_base64')) {
-            $imageData = $request->input('generated_image_base64');
-            $imageName = 'foto-berita/' . uniqid() . '.png';
-            Storage::disk('public')->put($imageName, base64_decode($imageData));
-            $validatedData['foto'] = $imageName;
-        }
-
-        $validatedData['user_id'] = auth()->user()->id;
-
-        Berita::create($validatedData);
-
-        return redirect()->route('admin.berita.index')->with(['msg' => 'Berita Berhasil Ditambahkan', 'class' => 'success']);
     }
 
 
